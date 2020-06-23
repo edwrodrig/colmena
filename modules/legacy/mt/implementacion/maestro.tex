@@ -1,0 +1,84 @@
+El programa maestro es el principal programa del cluster virtual. Es el nexo entre los usuarios y el poder de cómputo que reside en los esclavos. Soluciones como la especificación de trabajos mediante archivos SQLite3 tienen el fin de dar al maestro un rendimiento óptimo. El programa maestro es el elemento de software que maneja más datos y tráfico de red que cualquier otro elemento en el sistema. 
+\subsection{Estructura del programa}
+El programa maestro es un servicio, un programa que responde a las peticiones de los programas clientes y esclavos. Las peticiones de estos dos programas son operaciones sobre un conjunto de datos que comprende una base de datos de usuarios, el estado de los esclavos y la lista de trabajos.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image23.eps}
+\end{center}
+\caption{Componentes del programa maestro}
+\label{fig:image23}
+\end{figure}
+En la figura \ref{fig:image23} se muestran los componentes internos del programa maestro. Los diferentes módulos que componen el programa se describen a continuación:
+\subsubsection{Módulo comunicación}
+Casi en su totalidad el programa maestro es un programa reactivo que sólo ejecuta acciones cuando recibe mensajes desde clientes o esclavos. Este hecho hace que el módulo comunicación sea muy importante para el programa.
+
+El módulo comunicación cuenta con dos clases : \emph{comunicador cliente} y \emph{comunicador esclavo} que tienen como función recibir y enviar los mensajes que provienen tanto de clientes como esclavos.
+Ambas clases tienen un comportamiento diferente. El \emph{comunicador cliente} es un servidor TCP que recibe las conexiones correspondientes a peticiones de los clientes. Cuando recibe una petición, el servidor asigna una hebra al socket TCP correspondiente y lo atiende, ejecutando las acciones pertinentes a la petición. Cuando las acciones han sido ejecutadas, se envían las respuestas al cliente y finalmente el socket es cerrado.
+
+El \emph{comunicador esclavo} es un socket UDP que recibe todos los paquetes de un puerto determinado. Estos paquetes son traducidos a señales y gatillan acciones dentro del sistema.
+\subsubsection{Módulo usuarios y grupos}
+Este módulo es una clase que sirve de interfaz para una base de datos SQLite3 que pertenece al maestro donde almacena la información sobre usuarios y grupos. Las dos tablas se describen a continuación:
+\subsubsection{Tabla usuarios}
+\begin{verbatim}
+Usuarios( usuario , contraseña )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{usuario :} Nombre identificador de usuario
+\item \textbf{contraseña :} Contraseña del usuario.
+\end{itemize}
+\subsubsection{Tabla grupos}
+\begin{verbatim}
+Grupos( nombre , url , usuario )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{nombre :} Nombre del grupo.
+\item \textbf{url :} Dirección URL de la página con la lista de páginas a mostrar por los salvapantallas del grupo.
+\item \textbf{usuario :} Nombre del dueño del grupo.
+\end{itemize}
+El código SQL de creación de ambas tablas es el siguiente:
+\begin{verbatim}
+CREATE TABLE users ( user TEXT , pass TEXT , PRIMARY KEY ( user ) ) ;
+CREATE TABLE groups ( name TEXT , url TEXT , user TEXT , PRIMARY KEY ( name ) ) ; 
+\end{verbatim}
+\subsubsection{Módulo lista de esclavos}
+Este módulo es una clase que maneja la lista de estados de los esclavos. A su vez, los estados de esclavos son clases contenedoras que tienen los siguientes atributos:
+\begin{itemize}
+\item \textbf{Id :} Identificador númerico del esclavo.
+\item \textbf{IP :} Dirección ip del esclavo.
+\item \textbf{Puerto :} Puerto del esclavo. 
+\item \textbf{Prioridad :} Estado de prioridad del esclavo, 0 si está en baja prioridad, 1 en alta.
+\item \textbf{Último actualización :} Fecha y hora de la última actualización del esclavo.
+\item \textbf{Tareas actuales :} Número de tareas que el esclavo está haciendo.
+\item \textbf{Máximo de tareas :} Número máximo de tareas que el esclavo puede hacer a la vez.
+\item \textbf{Grupo :} Nombre del grupo.
+\item \textbf{Lista de aplicaciones :} Lista de nombres de aplicaciones que el esclavo no tiene.
+\end{itemize}
+El módulo sirve como interfaz para las operaciones efectuadas por los mensajes recibidos en el módulo de comunicación.
+
+También existe un sistema de eliminación de esclavos que no han sido actualizados después de transcurrido cierto tiempo. Cuando esto ocurre con un cierto esclavo, su clase contenedora se elimina de la lista. Si el mismo esclavo intenta conectarse nuevamente, entonces se registrará como si fuese un esclavo nuevo.
+\subsubsection{Módulo lista de tareas}
+Es un módulo muy parecido en estructura al de lista de los esclavos. Su función principal es  servir como interfaz para los archivos SQLite3 de especificación de trabajos. Este módulo está compuesto por una clase que funciona como una lista de clases contenedoras que corresponden a cada trabajo ingresado al sistema. Estas clases contenedoras tienen tres funciones:
+\begin{enumerate}
+\item Servir como interfaz para el manejo de un archivo SQLite3 de especificación de un trabajo.
+\item Manejar y registrar el progreso del trabajo.
+\item Construir el archivo SQLite3 de especificación de resultados del trabajo. 
+\end{enumerate}
+El manejo del progreso del trabajo se hace con una tabla que se agrega a la base de datos correspondiente a la especificación del trabajo. Esta tabla llamada \emph{works} se decribe a continuación:
+\subsubsection{Tabla usuarios}
+\begin{verbatim}
+Works( tarea , esclavo )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{tarea :} Identificador de la tarea.
+\item \textbf{esclavo:} Identificador del esclavo ejecutando la tarea.
+\end{itemize}
+El código SQL de creación de la tabla es el siguiente:
+\begin{verbatim}
+CREATE TABLE works ( idtask INTEGER , idslave INTEGER , PRIMARY KEY ( idtask ) )
+\end{verbatim}
+Cuando un esclavo solicita una tarea, a la tabla \emph{works} se le agrega una tupla con el identificador de la tarea y el identificador del esclavo indicando que esa tarea está siendo ejecutada. Cuando un esclavo falla en la ejecución, la entrada correspondiente es borrada, indicando que la tarea no se ha ejecutado y es asignable a otro esclavo.
+
+La última función es la de construir la especificación de resultados de un trabajo. Cuando los archivos de resultados son recibidos de parte del esclavo, los datos son introducidos al archivo de especificación de resultados.

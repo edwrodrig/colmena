@@ -1,0 +1,38 @@
+El presente proyecto es un esfuerzo de ingeniería informática bastante completo, desde sus objetivos que buscan resultados con recursos subutilizados hasta su desarrollo, donde se enfrentaron muchos desafíos de diseño y también técnicos. Los resultados obtenidos en la evaluación validan el hecho de que el proyecto ha logrado su objetivo al poner a disposición el poder de cómputo ocioso de computadores de laboratorio. Los usuarios que han tenido a disposición el sistema han quedado satisfechos con el servicio que ofrece y admiten el potencial que tiene la masificación de esta tecnología.
+
+A continuación se muestran las conclusiones del proyecto:
+\section{Salvapantallas como Plataforma de Comunicación}
+El sistema implementa satisfactoriamente la plataforma de comunicación mediante salvapantallas, otorgándole el potencial para convertirse en un salvapantallas institucional. Si bien la plataforma existe, los usuarios no han explotado su potencial y se limitan a mostrar las páginas de inicio de sus laboratorios o departamentos. Quizás con la creación de una interfaz más amigable para cambiar las páginas mostradas por los salvapantallas, permita que los administradores exploren el potencial de este medio de comunicación.
+\section{Desarrollo de la Aplicación}
+Desarrollar un sistema distribuido de cómputo es una tarea compleja. Conocimientos sobre redes, tecnicismos sobre sistemas de archivos, métodos de comunicación a través de NAT, bases de datos relacionales y conocimientos sobre implementación en diversos sistemas operativos son muchos de los aspectos que se necesitan manejar para el desarrollo de este proyecto.
+
+El sistema consta de cuatro piezas de software que implican el desarrollo de cuatro aplicaciones por separado. Adicionalmente, hay que considerar el protocolo de comunicación entre tales programas que además debe ajustarse a aspectos técnicos, como permitir la comunicación a través de NATs.
+
+Un aspecto particularmente complejo es el de manejar grandes volúmenes de datos debido al hecho de que el desarrollador se ve enfrentado a restricciones técnicas que no suelen presentarse en aplicaciones convencionales. Cabe decir que durante el desarrollo, gran parte del sistema tuvo que ser reconstruido a causa de esta razón, lo que aumentó el tiempo de desarrollo. Fue un problema  La solución que consta de especificar los trabajos como archivos SQLite3 fue causa de lo anteriormente dicho. En primera instancia se usaban múltiples archivos, lo que resultaba en tiempos no deseados a la hora de manejarlos, ya que los sistemas de archivos no están concebidos para manejar muchos archivos en un mismo directorio\cite{filesystem}.
+\section{Costos y Beneficios del Uso de Virtual Cluster}
+Los beneficios del uso del sistema son claros, su facilidad de implementar en una red y que según lo expuesto en las evaluaciones funciona y permite ejecutar trabajos mucho más rápidamente. Los usuarios del laboratorio PROFC de Tundra han notado esto y sugieren que Colmena sea usado para resolver más problemas.
+
+En relación a las dos soluciones existentes analizadas, la ventaja que tiene sobre Q$^2$ADPZ es la de permitir manejar gran cantidad de archivos contenidos en bases de datos SQLite3, permitir desplegar el sistema en estructuras de red que comprendan NATs y tener un protocolo de comunicación mucho más liviano que el de mensajes en formato XML.
+
+La ventaja que tiene sobre BOINC es que permite una fácil adaptación del sistema a una aplicación ya existente sin tener que preocuparse de aspectos adicionales innecesarios para el procesamiento de datos\footnote{sistema de recompensa de voluntarios, elaboración de sitio web y adaptación de aplicaciones al modelo BOINC}. En el cluster virtual sólo se necesita construir el archivo SQLite3 e ingresarlo mediante el programa cliente lo que se puede automatizar fácilmente con un lenguaje de scripting como PHP.
+
+Finalmente con respecto a la computación de nube, el sistema permite aprovechar recursos existentes que están siendo subutilizados en vez de invertir dinero en un servicio de cómputo.
+ 
+Los costos son mínimos, ya que en su mayoría utiliza recursos disponibles. Lo único de lo que hay que disponer adicionalmente es un servidor que albergue la aplicación maestra. Otro costo, que no es completamente necesario, es que para aprovechar de mejor forma los computadores ociosos es recomendable dejarlos encendidos por períodos donde los usuarios no los utilicen como lo son las noches y fines de semana. Sin embargo este hecho es sólo una recomendación y no un requerimiento puesto que, como se muestra en la evaluación, el tiempo ocioso en computadores de laboratorios comprendido entre la salida de un usuario y la entrada de otro, es un poder de cómputo significativo.
+\section{Trabajo Futuro}
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{images/image19.eps}
+\caption{Estructura de árbol propuesta para el cluster virtual}
+\label{fig:image19}
+\end{figure}
+El cluster virtual desarrollado en el presente proyecto es un prototipo. Por esta razón muchos aspectos pueden ser mejorados a futuro para una versión final. En lo que respecta a la comunicación se puede trabajar en aspectos como la seguridad, adicionando el uso encriptación al envío de mensajes. También se puede optimizar el flujo de red detectando qué nodos necesitan la técnica UDP hole punching\cite{udpholepunching} para mantener las conexiones y cuáles no, ya que el flujo de paquetes puede ser significantivo si aumenta el número de nodos.
+
+El cluster virtual ha funcionado bien con el número de nodos expuesto en las pruebas, pero a futuro puede que este número sea significativamente mayor, y como ha sido ejemplo el presente proyecto, cuando uno se acerca a cantidades no comúnmente consideradas, se presentan restricciones no contempladas. Por eso sería apropiado proponer pruebas para casos donde el número de nodos sea bastante mayor.
+
+También, para adelantarse a los problemas que pueden suceder ante lo anteriormente dicho, se puede agregar al diseño unas entidad que funcionen como \emph{submaestros}, entidades que ante el maestro se comporten como esclavos pero ante los esclavos se comporten como maestros. Esto puede servir para que Colmena, en vez de tener una estructura de estrella (un maestro conectado con muchos esclavos), tenga una estructura de árbol (un maestro conectados a submaestros y éstos a esclavos), como se muestra en la figura \ref{fig:image19}. Se podría probar con muchos niveles de submaestros y buscar una topología óptima de red para cada situación.
+
+Actualmente Colmena requiere que los esclavos se actualicen manualmente, es decir, debe exsitir una persona que en caso de actualizaciones o adición de aplicaciones, deba encargarse de este proceso. Una característica interesante sería agregar un mecanismo automático de actualizaciones para relegar estas acciones de los usuarios.
+
+Finalmente se recomienda implementar el soporte al salvapantallas para otros sistemas operativos, lo que no se pudo concretar por la cantidad de manejadores de salvapantallas que hay en otras plataformas como Linux, además de una pobre documentación al respecto.
+

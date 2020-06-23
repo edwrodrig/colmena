@@ -1,0 +1,64 @@
+La especificación del trabajo es manejada por el programa cliente y el programa maestro. El programa cliente envía una especificación al programa maestro que agrega a su lista de trabajos.
+Para la implementación de la especificación del trabajo se consideran las siguientes requisitos que debe cumplir:
+\begin{itemize}
+\item Transferible por la red.
+\item Manejar información contenida en gran cantidad de archivos\footnote{Del orden de los cientos de miles de archivos}.
+\end{itemize}
+Manejar un gran número de archivos representa un problema. Los sistemas de archivos jerárquicos no están diseñados para manejar una gran cantidad de archivos en un mismo directorio \cite{filesystem}. Muchas aplicaciones se han visto enfrentadas a este problema. El caso más común son los servidores de correo electrónico (QMail, Postfix, etc) que almacenan cada mensaje en un archivo y para evitar listados enormes de archivos, los organizan en una estructura de subdirectorios.
+Considerando también que debe ser transferible por red (y además sobre un protocolo poco fiable como UDP), enviar muchos archivos es poco adecuado y sería mejor que un sólo archivo contuviera todos los datos que comprenden la especificación.
+
+\emph{SQLite3}\cite{sqlite3page} es una biblioteca de software que implementa un motor de base de datos SQL. Las principales características de SQLite3 con respecto a otros motores de base de datos es que no requiere configuración ni de un servidor y además toda la base de datos es contenida dentro de un sólo archivo. Usando archivos SQLite3 para especificar el trabajo, el usuario tiene la ventaja de poder ver un trabajo como una base de datos relacional accedida por lenguaje SQL y para ámbitos de comunicación, estas bases de datos son tratadas como un simple archivo, que además puede ser comprimido fácilmente para optimizar su transferencia.
+\subsection{Estructura de la base de datos}
+En la figura \ref{fig:image14} se muestra un modelo entidad-relación de la especificación del trabajo. En este modelo tenemos tres entidades:
+\begin{itemize}
+\item \textbf{Tareas :} Esta entidad identifica la tarea a ejecutar. Tiene 4 atributos: Un identificador numérico único, el programa a ejecutar, los argumentos de línea de comando de la ejecución de dicho programa y el contenido de la entrada estándar. Esta entidad está asociada con la entidad archivos que comprende a los archivos de entrada necesarios para la ejecución de la tarea; y también está asociada con la entidad salidas que son los archivos de resultados a obtener de la ejecución de la tarea.
+\item \textbf{Archivos :} Esta entidad representa un archivo de entrada de una o varias tareas. Tiene 3 atributos: Un identificador numérico único, el nombre del archivo y los datos contenidos en el archivo. Un tarea puede tener muchos archivos y un archivo puede estar relacionado con muchas tareas.
+\item \textbf{Salidas :} Esta entidad representa los nombres de los archivos de salida de una tarea. Tiene un sólo atributo y es el nombre del archivo a obtener. Una tarea puede tener muchas salidas.
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/image14.eps}
+\end{center}
+\caption{Modelo entidad-relación de la especificación de trabajos}
+\label{fig:image14}
+\end{figure}
+Este modelo se traduce en 2 tablas que muestran a continuación:
+\subsubsection{Tabla tareas}
+\begin{verbatim}
+Tareas( id , argumentos , entrada estandar , archivos , salidas )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{id :} Identificador numérico entero.
+\item \textbf{argumentos :} Cadena de caracteres.
+\item \textbf{entrada estandar :} Datos binarios.
+\item \textbf{archivos:} Lista de identificadores de archivos separados por coma (,).
+\item \textbf{salidas:} Lista de nombres de archivos de salida separados por coma (,).	
+\end{itemize}
+\subsubsection{Tabla archivos}
+\begin{verbatim}
+Archivos( id , nombre , datos )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{id :} Identificador numérico entero.
+\item \textbf{nombre :} Cadena de caracteres.
+\item \textbf{datos :} Datos binarios.
+\end{itemize}
+\subsection{Especificación SQL}
+Las sentencias SQL de creación de las tablas tareas y argumentos son las siguientes:
+\begin{verbatim}
+CREATE TABLE files ( id INTEGER , name TEXT , data TEXT ) ;
+CREATE TABLE tasks ( program TEXT , args TEXT , stdin TEXT ,
+                     files TEXT , retrieve TEXT ) ;
+\end{verbatim}
+La tabla \texttt{files} corresponde a la de \emph{archivos} y la tabla \texttt{tasks} corresponde a la \emph{tareas}. La tabla tasks no posee un campo id ya que en este caso se usa el identificador por defecto que posee una fila de una tabla SQLite3 y que se llama  \texttt{rowid}. Se puede acceder a él mediante la consulta SQL :
+\begin{verbatim}
+SELECT rowid FROM tasks ;
+\end{verbatim}
+
+
+
+
+
+

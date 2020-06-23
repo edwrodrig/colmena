@@ -1,0 +1,729 @@
+La comunicación es un aspecto primordial de todo sistema que funcione sobre una red. En este capítulo se describe el protocolo de comunicación entre los diferentes elementos del sistema. Qt4 dispone de múltiples clases y tipos de datos que facilitan la implementación de la comunicación y que son nombrados en esta sección. Para obtener una descripción más detallada de éstos, se solicita al lector revisar la documentación de Qt4 disponible en línea\cite{qtdocpage}. En este capítulo se utiliza el mecanismo de descripción de mensajes definido en el anexo \ref{anexo:definicion_mensaje}. 
+\section{Protocolo Cliente-Maestro}
+La comunicación entre el cliente y el maestro toma como base el protocolo TCP. El maestro funciona como servidor TCP sobre un puerto específico. Cuando un programa cliente hace una petición\footnote{las peticiones corresponden a las diferentes acciones que el usuario puede acceder mediante el cliente que se encuentran descritas en la sección \ref{ref:arquitectura_usuarios}}, establece una conexión al maestro y según la petición que haya solicitado son los mensajes que intercambiarán. Todos los intercambios de mensajes de las diferentes peticiones parten con un marco de comunicación destinado a la autenticación del usuario que tiene el fin de determinar si el usuario está habilitado para hacer la acción que establece en la petición. Si después de esto se determina que el usuario está habilitado para desarrollar la acción, el intercambio de mensajes prosigue según la petición que se haya efectuado. 
+\subsection{Marco de autenticación}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 acc | QString user | QString pass |}&\texttt{cliente>maestro}\\
+\texttt{| quint8 resp |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación sirve para determinar si el usuario tiene permitido ejecutar una acción. \item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{acc:} Valor numérico que codifica la acción a ejecutar por el cliente.
+\item \textbf{user:} Nombre de usuario
+\item \textbf{pass:} Contraseña de usuario.
+\item \textbf{rest:} Valor numérico que codifica la respuesta del maestro.
+\end{itemize}
+\end{itemize}
+\subsection{Marco agregar trabajo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QByteArray data |}&\texttt{cliente>maestro}\\
+\texttt{| qint32 id |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación sirve para agregar un trabajo al maestro.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{data:} Datos del archivo de especificación del trabajo comprimidos con el algoritmo zlib\cite{zlibpage}.
+\item \textbf{id:} Identificador que el maestro le asoció al trabajo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco agregar trabajo local}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString path |}&\texttt{cliente>maestro}\\
+\texttt{| qint32 id |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación sirve para agregar un trabajo al maestro que se encuentra en el mismo computador. Con este método se ahorra el tiempo de transferencia por red.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{data:} Ruta del archivo de especificación del trabajo.
+\item \textbf{id:} Identificador que el maestro le asoció al trabajo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco borrar trabajo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id |}&\texttt{cliente>maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se borra un trabajo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador del trabajo a borrar.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener información de trabajo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id |}&\texttt{cliente>maestro}\\
+\texttt{| qint32 id | QString user | qint32 comp | qint32 total |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se obtiene información sobre un trabajo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador del trabajo.
+\item \textbf{user:} Usuario dueño del trabajo.
+\item \textbf{comp:} Número de tareas completados.
+\item \textbf{total:} Número de total de tareas del trabajo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener resultados de trabajo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id |}&\texttt{cliente>maestro}\\
+\texttt{| QByteArray data |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se obtiene los resultados de un trabajo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador del trabajo.
+\item \textbf{data:} Datos binarios comprimidos por zlib (zip) de los resultados del trabajo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener resultados de trabajo local}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id |}&\texttt{cliente>maestro}\\
+\texttt{| QString path |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se obtiene los resultados de un trabajo cuando el maestro se encuentra en la misma máquina.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador del trabajo.
+\item \textbf{path:} Ruta del archivo de resultados en el computador.
+\end{itemize}
+\end{itemize}
+\subsection{Marco listar trabajos}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id\_1 | QString user\_1 |}&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_2 | QString user\_2 |}&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_n | QString user\_n |}&\texttt{cliente<maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la lista de trabajos que hay en el sistema.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id\_x:} Identificador del trabajo x.
+\item \textbf{user\_x:} Usuario dueño del trabajo x.
+\end{itemize}
+\end{itemize}
+\subsection{Marco borrar tarea}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 job | qint32 id |}&\texttt{cliente>maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea borrar de una tarea en específico.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{job:} Identificador del trabajo.
+\item \textbf{id:} Identificador de la tarea.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener información de tarea}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 job | qint32 id |}&\texttt{cliente>maestro}\\
+\texttt{| qint32 id | QString prog | QString args | QString ret |}&\texttt{cliente<maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener información sobre una tarea.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{job:} Identificador del trabajo.
+\item \textbf{id:} Identificador de la tarea.
+\item \textbf{prog:} Nombre del programa a ejecutar por la tarea.
+\item \textbf{args:} Argumentos de línea de comando de la tarea.
+\item \textbf{ret:} Lista de archivos a recuperar por la ejecución de la tarea separador por coma (,).
+\end{itemize}
+\end{itemize}
+\subsection{Marco listar tareas}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 job |}&\texttt{cliente>maestro}\\
+\texttt{| qint32 id\_1 | QString prog\_1 |}&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_2 | QString prog\_2 |}&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_n | QString prog\_n |}&\texttt{cliente<maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la lista de tareas de un trabajo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{job:} Identificador del trabajo.
+\item \textbf{id\_x:} Identificador de la tarea x.
+\item \textbf{prog\_x:} Nombre del programa a ejecutar por la tarea x.
+\end{itemize}
+\end{itemize}
+\subsection{Marco agregar grupo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString group | QString url | QString user |}&\texttt{cliente>maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea agregar un grupo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{group:} Nombre de grupo.
+\item \textbf{url:} Dirección URL con la lista de páginas a mostrar por el salvapantallas.
+\item \textbf{user:} Usuario dueño del grupo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco cambiar grupo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString group | QString url |}&\texttt{cliente>maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea cambiar la URL con la lista de páginas a mostrar por el salvapantallas.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{group:} Nombre de grupo.
+\item \textbf{url:} Dirección URL con la lista de páginas a mostrar  por el salvapantallas.
+\end{itemize}
+\end{itemize}
+\subsection{Marco borrar grupo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString group |}&\texttt{cliente>maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea borrar un grupo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{group:} Nombre de grupo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener información de grupo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString group |}&\texttt{cliente>maestro}\\
+\texttt{| QString url | QString user |}&\texttt{cliente<maestro}\\
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener información sobre un grupo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{group:} Nombre de grupo.
+\item \textbf{url:} Dirección URL con la lista de páginas a mostrar por el salvapantallas.
+\item \textbf{user:} Usuario dueño del grupo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener lista de grupos}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString group\_1 |}&\texttt{cliente<maestro}\\
+\texttt{| QString group\_2 |}&\texttt{cliente<maestro}\\
+\texttt{| QString group\_n |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la lista de grupos existentes en el sistema.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{group\_x:} Nombre del grupo x.
+\end{itemize}
+\end{itemize}
+\subsection{Marco agregar usuario}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString user | QString pass |}&\texttt{cliente>maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea agregar un usuario al sistema.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{user:} Nombre de usuario.
+\item \textbf{pass:} Contraseña de usuario.
+\end{itemize}
+\end{itemize}
+\subsection{Marco cambiar contraseña de usuario}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString pass |}&\texttt{cliente>maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea cambiar la contraseña del usuario.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{pass:} Contraseña de usuario.
+\end{itemize}
+\end{itemize}
+\subsection{Marco borrar usuario}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString user |}&\texttt{cliente>maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea borrar un usuario.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{user:} Nombre de usuario a borrar.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener información de usuario}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString user |}&\texttt{cliente>maestro}\\
+\texttt{| QString pass |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la contraseña del usuario.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{user:} Nombre de usuario.
+\item \textbf{pass:} Contraseña del usuario.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener lista de usuarios}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString user\_1 |}&\texttt{cliente<maestro}\\
+\texttt{| QString user\_2 |}&\texttt{cliente<maestro}\\
+\texttt{| QString user\_n |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la lista de usuarios,
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{user\_x:} Nombre de usuario.
+\end{itemize}
+\end{itemize}
+\subsection{Marco resetear esclavo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| QString id |}&\texttt{cliente>maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea resetear un esclavo del sistema.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador de esclavo a resetear.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener información de esclavo}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id |}&\texttt{cliente>maestro} \\
+\texttt{| qint32 id | QString ip | qint32 port | quint8 prior }&\\
+\texttt{| QString last | qint32 cur | qint32 total | QString group |}&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener información sobre un esclavo.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id:} Identificador de esclavo.
+\item \textbf{ip:} Dirección IP del esclavo.
+\item \textbf{port:} Puerto del esclavo.
+\item \textbf{prior:} Prioridad del esclavo codificada numéricamente.
+\item \textbf{last:} Fecha y hora de la última actualización del esclavo.
+\item \textbf{cur:} Número de tareas que el esclavo tiene en ejecución.
+\item \textbf{total:} Número máximo de tareas que el esclavo soporta simultaneamente.
+\item \textbf{group:} Grupo al que pertence el esclavo.
+\end{itemize}
+\end{itemize}
+\subsection{Marco obtener lista de esclavos}
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| qint32 id\_1 | QString ip\_1 | qint32 port\_1 | }&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_2 | QString ip\_2 | qint32 port\_2 | }&\texttt{cliente<maestro}\\
+\texttt{| qint32 id\_n | QString ip\_n | qint32 port\_n | }&\texttt{cliente<maestro}
+\end{tabular}
+\item \textbf{Descripción :} Este marco de comunicación se usa cuando se desea obtener la lista de esclavo que se encuentran conectados al sistema.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{id\_x:} Identificador de esclavo x.
+\item \textbf{ip\_x:} Dirección IP del esclavo x.
+\item \textbf{port\_x:} Puerto del esclavo x.
+\end{itemize}
+\end{itemize}
+\section{Protocolo Maestro-Esclavo}\label{ref:com_maestro_esclavo}
+La comunicación entre el programa maestro y el programa esclavo es la más compleja de todo el sistema. Esto es causa de la gran cantidad de programas esclavos con la que el programa maestro debe estar comunicado y por la necesidad que la comunicación logre pasar a través de \emph{NATs}. El protocolo base a utilizar es UDP, que se eligió ante su alternativa TCP, porque es un protocolo liviano que disminuye la carga presente en la red del sistema. Además la técnica elegida para superar el problema suscitado por los NATs (descrita en la próxima parte) recomienda el uso de UDP. Sin embargo, UDP implica problemas anexos, como el hecho de no tener control sobre el orden de llegada de los mensajes o si realmente éstos llegaron a su destino. Todos estos inconvenientes y sus soluciones son descritos a continuación.
+\subsection{NAT}
+Es común que las redes locales de pequeñas compañías tengan sólo una salida a una red superior como internet. En palabras más técnicas, todos los computadores tienen asociados una IP interna diferente, pero en la red externa todos comparten la misma dirección IP gracias a un NAT. NAT (Traducción de Direcciones de Red)\cite{nat} es un mecanismo que permite que direcciones con un puerto interno sean mapeadas con la dirección externa más un puerto. En la figura \ref{fig:image21} se grafica este mecanismo. Tal como se puede intuir, no hay suficientes combinaciones de direcciones externas con puertos que puedan abarcar todas las combinaciones de direcciones internas con puertos, por eso, NAT asume que no todas estas combinaciones van a estar siendo utilizadas al mismo tiempo lo que permite dejar de utilizar las combinaciones que expiran por no uso quedando disponibles para que otra máquina pueda establecer una conexión externa. Pero esto implica un problema con aplicaciones que necesitan una conexión permanente ya que eventualmente la dirección que antes estaba asignada a una máquina puede no estarlo en otra ocasión o estarlo a una máquina diferente. La mayoría de los firewall y cortafuegos en la actualidad incluyen NATs, lo que hace que el problema no sea algo que se pueda obviar facilmente y menos cuando uno quiere incluir la mayor cantidad de computadores de una red. Sin ir más lejos, dentro de la Universidad de Concepción, la subred del laboratorio de redes del DIICC usa este mecanismo para sus computadores.  A continuación se describe la solución para superar esta problemática.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image21.eps}
+\end{center}
+\caption{Esquema del funcionamiento de un NAT}
+\label{fig:image21}
+\end{figure}
+\subsection{UDP Hole Punching}
+\emph{UDP hole punching}\cite{udpholepunching} es una técnica para poder comunicar máquinas que están detras de NATs superando el problema suscitado de ello. Esta técnica es ampliamente utilizada por diversos protocolos existentes en la actualidad que van desde protocolos de juegos en línea, hasta los de conocidas aplicaciones como \emph{Skype}\cite{skypepage}.
+
+Para explicar la técnica se deben tener en cuenta tres entidades que se definen a continuación:
+\begin{itemize}
+\item Un servidor \textbf{S} que registre las direcciones IP y los puertos UDP de los clientes que se conectan a él.
+\item Dos clientes \textbf{A} y \textbf{B} que se comuniquen por el protocolo UDP.
+\end{itemize}
+Ahora los pasos de la técnica se nombran a continuación :
+\begin{enumerate}
+\item \textbf{A} no sabe como alcanzar a \textbf{B}, entonces \textbf{A} pide a \textbf{S} ayuda para establecer una conexión UDP con \textbf{B}.
+\item \textbf{S} envía a \textbf{A} un mensaje conteniendo la dirección y puerto UDP registrados de \textbf{B}. Al mismo tiempo \textbf{S} envía a \textbf{B} la dirección y puerto UDP de \textbf{A}.
+\item Con ambos clientes conociendo las direcciones y puertos del otro entonces pueden establecer la conexión.
+\end{enumerate}
+La técnica funciona porque cuando los clientes se conectan al servidor, este almancena la dirección y puerto que el NAT a asignado para la comunicación (si es que éste está presente). Por eso, comunicándose con la dirección y puerto ofrecidos por el servidor, los clientes pueden acceder el uno al otro. El procedimiento se ilustra en la figura \ref{fig:image22}.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/image22.eps}
+\end{center}
+\caption{El proceso de UDP hole punching}
+\label{fig:image22}
+\end{figure}
+Otro aspecto a considerar es que las asignaciones de direcciones y puertos que hacen los NATs caducan después de un tiempo, por eso hay que enviar paquetes de comunicación periódicamente con el fin de que la dirección y puerto continúen asignados para el mismo computador.
+
+En el cluster virtual no se implementa esta técnica exactamente ya que no hay conexión entre clientes sino que simplemente se necesita de un \emph{medio hole punching}, es decir, que el servidor pueda acceder al cliente y sea capaz de mantener su conexión, donde el servidor y el cliente serían el programa maestro y el esclavo respectivamente.
+\subsection{Dando fiabilidad a la comunicación UDP}
+Como se dijo anteriormente, UDP no es un protocolo fiable, ya que no provee mecanismos que permitan cerciorarse que un mensaje ha llegado adecuadamente. Por eso, el diseño del protocolo debe considerar este problema. Para superar esto, se crearon unos elementos llamados \emph{repetidores}. Estos elementos son implementados como clases que envían indefinidamente un paquete UDP hasta que reciben un paquete UDP de notificación de recepción del mensaje por el receptor. Este mecanismo asegura que si un mensaje se pierde en el envío desde el emisor al receptor o viceversa, pueda enviarse nuevamente hasta que una comunicación se complete. En la figura \ref{fig:image26} se ilustra el funcionamiento de los repetidores.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image26.eps}
+\end{center}
+\caption{Funcionamiento de los repetidores UDP}
+\label{fig:image26}
+\end{figure}
+\subsection{Transferencia de archivos mediante UDP}
+Otro aspecto importante para el sistema es la transferencia de archivos. Como se ha reiterado, UDP es un sistema poco confiable, pero parte del problema se ha solucionado con la implementación de repetidores. Sin embargo, los paquetes UDP tienen un tamaño máximo destinado a los datos que si bien es suficiente para enviar pequeños mensajes no lo es para enviar un archivo completo de datos de entrada o salida de una aplicación actual. Por eso un archivo debe ser particionado y enviado en pequeños paquetes. En la figura \ref{fig:image28} se ilustra el mecanismo de transferencia de archivos por partes. Cada parte es enviada por un paquete llamado \texttt{send} mediante un repetidor que es terminado cuando recibe un paquete de notificación \texttt{sendack} y crea un nuevo repetidor con el paquete que corresponde a la parte siguiente del archivo. Pero tal como se muestra en el esquema esto no es suficiente para asegurar la transferencia del archivo ya que los repetidores aseguran que el emisor sepa que el mensaje enviado ha llegado, pero no que el receptor sepa que llegó el mensaje de notificación. Este problema se puede ejemplificar en el siguiente caso:
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image28.eps}
+\end{center}
+\caption{Mecanismo de transferencia de archivos mediante UDP}
+\label{fig:image28}
+\end{figure}
+\begin{enumerate}
+\item El receptor recibe el paquete de la parte 1 del archivo.
+\item El receptor envía el paquete de notificación de que lo ha recibido.
+\item El paquete de notificación se pierde en la red.
+\item Como el emisor no ha recibido un paquete de notificación, entonces el repetidor envía nuevamente el paquete de la parte 1.
+\end{enumerate}
+En este caso el receptor es incapaz de discriminar si el último paquete que ha enviado el emisor es el de la parte 1 por la pérdida del paquete de notificación, o si es el de la parte 2 en caso que el paquete de notificación ha llegado. Para solucionar esto basta con enumerar los paquetes con el fin de que el receptor pueda discrimar en el caso anteriormente mencionado. Generalmente las transferecias de archivos dentro del sistema están asociadas a una tarea específica. Como el maestro maneja las transferencias de múltiples tareas a la vez, es necesario agregar al paquete identificadores que lo asocien a una tarea en particular. Con todas estás consideraciones el formato del paquete \texttt{send} queda de la siguiente forma :
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job |}\\
+\texttt{| qint32 task | qint32 num | QByteArray data |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 6.
+\item \textbf{id:} Identificador del esclavo. Independiente si la transferencia es desde o hacia el esclavo.
+\item \textbf{job:} Identificador del trabajo al que asociado el archivo.
+\item \textbf{task:} Identificador de la tarea a la que asociado el archivo.
+\item \textbf{num:} Indicador del número de la parte del archivo.
+\item \textbf{data:} Datos de la parte del archivo.
+\end{itemize}
+\end{itemize}
+El formato del paquete \texttt{sendack} se describe a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job |}\\
+\texttt{| qint32 task | qint32 num |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 7.
+\item \textbf{id:} Identificador del esclavo. Independiente si la transferencia es desde o hacia el esclavo.
+\item \textbf{job:} Identificador del trabajo al que asociado el archivo.
+\item \textbf{task:} Identificador de la tarea a la que asociado el archivo.
+\item \textbf{num:} Indicador del número de la parte del archivo.
+\end{itemize}
+\end{itemize}
+Opcionalmente el mensaje que notifica la llegada de la última parte del archivo puede tener un diferente formato con el fin de optimizar el intercambio de paquetes.
+\subsection{Estado de los esclavos}
+Los programas esclavos permanentemente notifican al maestro su estado. Para esto se valen de un repetidor que envía un paquete UDP llamado \texttt{state} que contiene el estado del programa esclavo. Este paquete se describe a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 tipo | qint32 id | qint32 tareas | quint8 priority |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 0.
+\item \textbf{id:} Identificador del esclavo asignado por el maestro. Cuando el maestro no le ha asignado un identificador, este valor es -1.
+\item \textbf{tareas:} Número de tareas en ejecución.
+\item \textbf{prior:} Prioridad del esclavo. Se usa 1 para alta prioridad y 0 para baja.
+\end{itemize}
+\end{itemize}
+Este paquete es de suma importancia ya que es el que mantiene la asignación de dirección y puerto que hace el NAT al computador que corre el programa esclavo. En el caso que el salvapantallas determina la prioridad del esclavo, el repetidor del mensaje de estado existe cuando cumple una de las siguiente dos condiciones:
+\begin{enumerate}
+\item El salvapantallas está activo.
+\item Hay una tarea en ejecución.
+\end{enumerate}
+Esto implica que si el computador está sin el salvapantallas y no ejecutando ninguna acción, no envía notificación de su estado. El maestro al no recibir ninguna actualización de estados por un período de tiempo, elimina al esclavo de su lista de esclavos disponibles.
+\subsection{Registro de un esclavo}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image27.eps}
+\end{center}
+\caption{Proceso de registro de un esclavo}
+\label{fig:image27}
+\end{figure}
+En la figura \ref{fig:image27} se muestra un esquema del intercambio de mensajes que ocurren en el proceso de registro de un esclavo. El proceso de registro empieza cuando el maestro recibe un mensaje \texttt{state} con una de las siguientes características:
+\begin{itemize}
+\item El valor \texttt{id} del mensaje es -1.
+\item Los valores \texttt{id} y la dirección y puerto de origen del mensaje no concuerda con ninguna entrada en la lista de esclavos disponibles.
+\end{itemize}
+Cuando esto ocurre, el maestro crea una entrada en la lista de esclavos disponibles para dicho esclavo y envía un paquete llamado \texttt{registered} que notifica el registro del esclavo. Este paquete se describe a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 tipo | qint32 id |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 1.
+\item \textbf{id:} Identificador que el maestro a asignado al esclavo.
+\end{itemize}
+\end{itemize}
+Una vez recibido el mensaje por el esclavo, obtiene su identificador. Pero el paquete \texttt{state} no contiene todos los datos que el maestro debe conocer de un esclavo disponible. Para este fin, el esclavo crea un repetidor que envía al maestro un paquete llamado \texttt{fullstate} que contiene la información restante:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 tipo | qint32 id | qint32 max | QString grupo |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 2.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{max:} Número máximo de tareas ejecutables simultáneamente por el esclavo. 
+\item \textbf{grupo:} Grupo del esclavo.
+\end{itemize}
+\end{itemize}
+Con esta información el maestro completa la información sobre el esclavo y envía a éste las URL con las listas de páginas de grupo. El mensaje utilizado para esto es un paquete llamado \texttt{fullstateack} que además cierra el repetidor que mantiene el esclavo. Este paquete se describe a continuación :
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 tipo | qint32 id | QString general | QString lista |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 3.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{general:} No utilizado. 
+\item \textbf{grupo:} URL con la lista de grupo de esclavos.
+\end{itemize}
+\end{itemize}
+\subsection{Obtención de tareas}
+La obtención de tareas parte con el maestro recibiendo un paquete \texttt{state}. Cuando ocurre esto, si es que el esclavo cumple las condiciones para enviar una tarea, el maestro revisa las tareas disponibles por ejecutar y envía un paquete \texttt{posttask} que es una petición de ejecución de parte del maestro para el esclavo. La descripción de este paquete se detalla a continuación :
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job | qint32 task | QString program |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 4.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{job:} Identificador de trabajo. 
+\item \textbf{task:} Identificador de tarea.
+\item \textbf{program:} Nombre del programa a ejecutar.
+\end{itemize}
+\end{itemize}
+Con la información contenida en el paquete \texttt{posttask} el esclavo puede discriminar si puede ejecutar la tarea. En específico, el esclavo revisa el nombre del programa y ve si tiene tal programa para ejecutar la tarea. Dependiendo de si el esclavo tiene o no el programa la comunicación se bifurca en dos posibilidades.\\
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image29.eps}
+\end{center}
+\caption{Primer caso de proceso fallido de obtención de una tarea}
+\label{fig:image29}
+\end{figure}
+La primera posibilidad, ilustrada en la figura \ref{fig:image29}, es que el esclavo no tenga la aplicación para ejecutar la tarea. En este caso el esclavo envía un paquete \texttt{nothaveapp} que notifica al maestro que el esclavo no tiene esa aplicación. Con esta información el maestro agrega la aplicación a la lista de no disponibles de dicho esclavo para no volver a envíar una tarea a ese esclavo que necesite tal aplicación. El formato del paquete \texttt{nothaveapp} es descrito a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | QString program |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 13.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{program:} Nombre del programa que no posee el esclavo.
+\end{itemize}
+\end{itemize}
+La segunda posibilidad es que el esclavo posea la aplicación para ejecutar la tarea. En este caso el esclavo envía un paquete \texttt{acceptedtask} por medio de un repetidor. Este paquete notifica al maestro que el esclavo ha aceptado la tarea y está listo para recibir los archivos de entradas. El formato de este paquete es el siguiente:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job | qint32 task |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 5.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{job:} Identificador de trabajo. 
+\item \textbf{task:} Identificador de tarea.
+\end{itemize}
+\end{itemize}
+Cuando el maestro recibe el mensaje \texttt{acceptedtask} la comunicación puede tomar dos caminos. La naturaleza de esta bifurcación se explica a continuación.
+
+El maestro está conectado a muchos esclavos simultáneamente. Cuando muchos esclavos envían su estado, a muchos de ellos le envía una petición de ejecución y posiblemente, muchas de esas peticiones hacen referencia a una misma tarea. Entonces para elegir el esclavo que finalmente va a ejecutar la tarea, se elige al esclavo que primero responda con un paquete \texttt{acceptedtask}. Esto es lo que determina los dos casos en que se bifurca la comunicación. Ambos casos se describen a continuación.\\
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image30.eps}
+\end{center}
+\caption{Proceso exitoso de obtención de tarea}
+\label{fig:image30}
+\end{figure}
+En el primer caso donde el esclavo es el primero que responde el paquete \texttt{acceptedtask}, el maestro envía la información de entrada  mediante el mecanismo de transferencia de archivos. La información de entrada es un arreglo binario comprimido por zlib\cite{zlibpage} que contiene los archivos de entrada serializados, los nombre de archivos de salida a recuperar y los argumentos de línea de comando. Tan pronto el esclavo reciba la información empieza a ejecutar la tarea. Este caso es ilustrado en la figura \ref{fig:image30}.\\
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image31.eps}
+\end{center}
+\caption{Segundo caso de proceso fallido de obtención de tarea}
+\label{fig:image31}
+\end{figure}
+En el segundo caso donde la tarea ya ha sido adjudicada por otro esclavo, el maestro envía un paquete \texttt{freetask} que ordena al esclavo liberar la tarea que ha aceptado anteriormente. Como confirmación el esclavo envía un paquete \texttt{freetaskack} al maestro. El formato del paquete \texttt{freetask} se detalla a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job | qint32 task |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 9.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{job:} Identificador de trabajo. 
+\item \textbf{task:} Identificador de tarea.
+\end{itemize}
+\end{itemize}
+El formato del paquete \texttt{freetaskack} se detalla a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job | qint32 task |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 10.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{job:} Identificador de trabajo. 
+\item \textbf{task:} Identificador de tarea.
+\end{itemize}
+\end{itemize}
+\subsection{Notificación de error de ejecución}
+Cuando la ejecución de una tarea en un esclavo falla, por ejemplo retornando violación de segmento, el programa esclavo envía un paquete \texttt{errortask} mediante un repetidor al maestro que notífica el término irregular de la ejecución. Cuando el maestro recibe el paquete \texttt{errortask} reinicia la tarea dejándola disponible para que otro esclavo se la adjudique. Después de esto, el maestro envía un mensaje \texttt{freetask} que detiene el repetidor y libera la tarea. Finalmente el esclavo envía un paquete \texttt{freetaskack} en forma de notificación. El formato del paquete \texttt{errortask} es descrito a continuación:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | qint32 job | qint32 task |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 8.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{job:} Identificador de trabajo. 
+\item \textbf{task:} Identificador de tarea.
+\end{itemize}
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image32.eps}
+\end{center}
+\caption{Notificación de error de ejecución al maestro}
+\label{fig:image32}
+\end{figure}
+El proceso de notíficación es ilustrado en la figura \ref{fig:image32}.
+\subsection{Envío de resultados al maestro}
+Cuando un esclavo términa una ejecución de una tarea, simplemente envía los datos de salida con el método de transferencia de archivos. De la misma forma que el maestro envía los datos de entrada al esclavo, los datos de salida son un arreglo binario comprimido con zlib con los archivos de salida serializados. Cuando la transferencia termina, la tarea es liberada del esclavo.
+La figura \ref{fig:image33} ilustra el envío de resultados al maestro.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image33.eps}
+\end{center}
+\caption{Envío de resultados al maestro}
+\label{fig:image33}
+\end{figure}
+\subsection{Liberación de tarea}
+En la figura \ref{fig:image35} se ilustra el proceso de liberación de tarea. A diferencia de la liberación que ocurre en el proceso de adjudicación de tareas por parte del esclavo, este otro caso de liberación comprende los casos donde el usuario mediante el cliente borra una que está siendo ejecutada por un esclavo. Cuando el maestro recibe una petición de liberación de tarea, el maestro envía un paquete \texttt{freetask} al esclavo mediante un repetidor. Finalmente, cuando el esclavo recibe este paquete, libera la tarea y envía un paquete \texttt{freetaskack} para notificar que ha ejecutado la liberación y parar el repetidor.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image35.eps}
+\end{center}
+\caption{Liberación de tarea}
+\label{fig:image35}
+\end{figure}
+\subsection{Actualización de lista páginas de grupo}
+Este caso ocurre cuando el usuario mediante el cliente actualiza la URL que contiene la lista de las páginas de un grupo determinado. El maestro busca a todos los esclavos registrados que pertenecen al grupo que se ha actualizado y envía a todos ellos un paquete \texttt{pagelist} mediante un repetidor. Cuando un esclavo recibe dicho paquete, actualiza las URL y envía de vuelta un paquete \texttt{pagelistack} para notificar que se ha hecho satisfactoriamente la operación además de detener el repetidor correspondiente. El formato del paquete \texttt{pagelist} es el siguiente:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id | QString general | QString list |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 11.
+\item \textbf{id:} Identificador del esclavo.
+\item \textbf{general:} No utilizado. 
+\item \textbf{list:} URL con la página que contiene la lista de páginas de grupo.
+\end{itemize}
+\end{itemize}
+El formato del paquete \texttt{pagelistack} es el siguiente:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l}
+\texttt{| quint8 tipo | qint32 id |}
+\end{tabular}
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador de tipo de paquete, este valor siempre es 12.
+\item \textbf{id:} Identificador del esclavo.
+\end{itemize}
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image36.eps}
+\end{center}
+\caption{Envío de resultados al maestro}
+\label{fig:image36}
+\end{figure}
+En la figura \ref{fig:image36} se ilustra la comunicación que implica la actualización de la lista de páginas de grupo.
+\section{Protocolo Esclavo-Salvapantallas}\label{ref:com_esclavo_salvapantallas}
+La comunicación entre el esclavo y el salvapantallas es simple. Toma como base el protocolo TCP. A pesar que el programa esclavo y el programa salvapantallas siempre se encuentran en el mismo computador, lo que instintivamente sugiere que no se necesita de un protocolo de red para su comunicación, una implementación TCP permite facilidad en la implementación y portabilidad de la aplicación. El programa esclavo funciona como un servidor TCP sobre un puerto específico. El salvapantallas, al ser lanzado inmediatamente abre un socket TCP con el esclavo y lo cierra cuando el salvapantallas es cerrado. Los dos casos en los cuales se comunican ambos programas son graficados en la figura \ref{fig:image20} y son descritos a continuación:
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image20.eps}
+\end{center}
+\caption{Casos de intercambio de mensajes entre programa esclavo y salvapantallas}
+\label{fig:image20}
+\end{figure}
+\subsection{Obtención de lista de páginas}
+Este caso ocurre cuando el salvapantallas inicia su funcionamiento y se conecta al esclavo. Al ocurrir esto, el programa esclavo envía al salvapantallas el siguiente mensaje:
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 tipo | QString lista\_1 | QString lista\_2 | }&\texttt{esclavo>salvapantallas}\\
+\end{tabular}
+\item \textbf{Descripción :} Este mensaje envía la información correspondiente a las páginas a mostrar por el salvapantallas.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{tipo:} Identificador númerico que indica qué tipo de mensaje es. Para este mensaje, este valor siempre es el mismo.
+\item \textbf{lista\_1:} URL de la página que tiene la lista de páginas a mostrar por todos los salvapantallas. Actualmente este valor no es utilizado en Colmena.
+\item \textbf{lista\_2:} URL de la página que tiene la lista de páginas a mostrar por los salvapantallas pertenecientes al grupo al que pertenece el esclavo.
+\end{itemize}
+\end{itemize}
+\subsection{Petición de actualización de estadísticas}
+Las estadísticas del sistema se presentan como una página HTML\ref{fig:image10} que está en el mismo computador que el salvapantallas. Cada vez que el salvapantallas quiera mostrar la página, debe ser una versión actualizada de las estadísticas. Como el salvapantallas no posee acceso a la información, debe pedirle al programa esclavo que lo haga. A continuación se muestra el traspaso de mensajes que ocurre en esta comunicación.
+\begin{itemize}
+\item \textbf{Diagrama :}\\
+\begin{tabular}{ l l}
+\texttt{| quint8 valor |}&\texttt{esclavo<salvapantallas}\\
+\texttt{| quint8 tipo  |}&\texttt{esclavo>salvapantallas}\\
+\end{tabular}
+\item \textbf{Descripción :} Este intercambio de mensajes ocurre cuando cuando el salvapantallas necesita mostrar una versión actualizada de las estadísticas.
+\item \textbf{Campos:}
+\begin{itemize}
+\item \textbf{valor:} Indicador de petición de actualización de estadística. Siempre es 0.
+\item \textbf{tipo:} Identificador númerico que indica que tipo de mensaje es. Para este mensaje, este valor siempre es el mismo.
+\end{itemize}
+\end{itemize}
+
+

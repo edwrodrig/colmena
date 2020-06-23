@@ -1,0 +1,85 @@
+En esta sección se describen funcionalidades y características adicionales del sistema.
+\subsection{Administración de esclavos}
+El sistema posee tres funciones para administrar y obtener información sobre los esclavos.
+\begin{itemize}
+\item \textbf{Obtener la información de un esclavo :} Muestra información sobre el estado del esclavo. Muestra el identificador numérico del esclavo asignado por el maestro, la dirección ip y el puerto, la disponibilidad, el número de tareas en ejecución, el número máximo de tareas ejecutables, la última actualización de esclavo y el nombre de grupo.
+\item \textbf{Listar los esclavos :} Esta función lista los esclavos que están en el sistema actualmente. La lista muestra los identificadores númericos de los esclavos, su dirección ip y puerto.
+\item \textbf{Reiniciar un esclavo :} Esta función permite cancelar las tareas en ejecución por un esclavo en específico y limpiar la lista de aplicaciones no disponibles por el esclavo. Es particularmente útil en fase de pruebas y/o instalación cuando los esclavos están susceptibles a errores de ejecución de las aplicaciones disponibles\footnote{Los errores de las aplicación comprenden errores en variables de entorno, entradas inválidas, violaciones de segmento, entre otros.}.
+\end{itemize}
+Estas funciones pueden ser accedidas mediante el cliente y solo por un usuario de nivel administrador.
+\subsection{Comportamiento de salvapantallas}\label{ref:arquitectura_salvapantallas}
+Los salvapantallas aparte de determinar cuando un esclavo se está utilizando o no, sirven para desplegar información en ellos.  Por defecto el salvapantallas despliega una pantalla con información sobre las tareas que se están ejecutando actualmente e información estadística relevante\footnote{Para cada aplicación: el número de ejecuciones, el tiempo de ejecuciones terminadas satisfactoriamente y las terminadas en error. También se muestran las tareas en ejecución en el momento.} (figura \ref{fig:image10}). Adicionalmente a esta pantalla, el salvapantalla puede desplegar información que puede ser establecida por ciertos usuarios. Esta información son páginas HTML básicas que son mostradas cíclicamente mientras el salvapantallas se encuentra en ejecución. El funcionamiento del salvapantallas es ilustrado en la figura \ref{fig:image12}.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image10.eps}
+\caption[Pantalla de información estadística del salvapantallas]{Pantalla de información estadística del salvapantallas. En ella se muestra para cada aplicación el número de ejecuciones, el tiempo de ejecuciones terminadas satisfactoriamente y las terminadas en error.}
+\label{fig:image10}
+\end{figure}
+\subsubsection{Grupos de esclavos}
+Como se mencionó anteriormente, los esclavos poseen un atributo llamado grupo, un identificador alfanumérico que caracteriza a un conjunto de esclavos. Este valor sirve para determinar las páginas a mostrar. El maestro posee un registro con nombres de grupo y su lista de páginas. Cuando un esclavo ingresa al sistema, obtiene la lista de páginas HTML a mostrar por el salvapantallas correspondientes al nombre de grupo que tenga. En la figura \ref{fig:image12} se muestra un diagrama del rol de los grupos y la lista de páginas en el funcionamiento del salvapantallas.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image12.eps}
+\caption{Diagrama de flujo del funcionamiento del salvapantallas}
+\label{fig:image12}
+\end{figure}
+\subsubsection{Operaciones sobre grupos}
+\begin{itemize}
+\item \textbf{Crear un grupo :} Crea un nuevo grupo. Esto significa simplemente asociar a un identificador de grupo una lista de páginas HTML.
+\item \textbf{Modificar grupo:} Cambia la lista de las páginas a mostrar.
+\item \textbf{Borrar grupo :} Elimina la lista de páginas para ese grupo. Los esclavos que tengan tal identificador no mostrarán páginas adicionales más que las que el salvapantallas muestra por defecto.
+\item \textbf{Obtener la información de un esclavo :} Muestra la información sobre el grupo. Muestra la lista de páginas HTML y el usuario al que pertenece el grupo.
+\item \textbf{Listar grupos :} Muestra una lista con todos los nombres de grupos existentes en el maestro.
+\end{itemize}
+\subsection{Sistema de usuarios}\label{ref:arquitectura_usuarios}
+El sistema cuenta con un sistema de usuarios con el fin de proteger tanto las ejecuciones pertenecientes a un usuario en particular, como restringir el acceso a funciones administrativas del sistema. Para poder ejecutar alguna tarea sobre el sistema se necesita de una cuenta de usuario. Existen dos niveles de usuarios, \emph{usuario} y \emph{administrador}, los cuales se diferencian en lo privilegios que estos poseen dentro del sistema.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image11.eps}
+\caption{Diagrama de casos de uso del sistema de cluster virtual}
+\label{fig:image11}
+\end{figure} 
+Los privilegios del nivel usuario son :
+\begin{itemize}
+\item Enviar un trabajo al sistema para su procesamiento.
+\item Consultar el estado de un trabajo enviado por el usuario.
+\item Obtener el resultado de un trabajo enviado por el usuario.
+\item Listar los trabajos enviados por el usuario.
+\item Listar las tareas de un trabajo enviados por el usuario.
+\item Eliminar un trabajo enviado por el usuario.
+\item Eliminar una tarea de un trabajo enviados por el usuario.
+\item Cambiar la contraseña del usuario.
+\item Modificar grupos del usuario.
+\item Obtener información del grupos del usuario.
+\item Listar grupos del usuario.
+\end{itemize}
+Los privilegios del nivel administrador son :
+\begin{itemize}
+\item Enviar un trabajo al sistema para su procesamiento.
+\item Consultar el estado de un trabajo enviado por cualquier usuario.
+\item Obtener el resultado de un trabajo enviado por cualquier usuario.
+\item Listar los trabajos enviados por cualquier usuario.
+\item Listar las tareas de un trabajo enviados por cualquier usuario.
+\item Eliminar un trabajo enviado por cualquier usuario.
+\item Eliminar una tarea de un trabajo enviados por cualquier usuario.
+\item Cambiar la contraseña de cualquier usuario.
+\item Crear un usuario.
+\item Eliminar un usuario.
+\item Listar usuarios.
+\item Obtener información sobre usuarios.
+\item Crear grupo.
+\item Modificar grupo de cualquier usuario.
+\item Borrar grupo.
+\item Obtener información de grupos de cualquier usuario.
+\item Listar grupos de cualquier usuario.
+\item Resetear un esclavo.
+\item Listar esclavos.
+\item Obtener la información de un esclavo.
+\end{itemize}
+Los usuarios pueden acceder a estas funciones mediante el cliente.
+Por defecto el sistema posee una cuenta con nivel administrador \emph{root} no eliminable para poder administrar el cluster virtual cuando se pone en marcha por primera vez\footnote{Cuando de pone en marcha el sistema solo existe la cuenta de usuario \emph{root}}. En la figura \ref{fig:image11} se muestra un diagrama con los casos de uso del sistema.
+\subsubsection{Operaciones sobre usuarios}
+\begin{itemize}
+\item \textbf{Crear un usuario :} Crea un nuevo usuario. Es en este paso donde se establecen los privilegios que tiene el usuario (nivel usuario o administrador).
+\item \textbf{Modificar contraseña del usuario.}
+\item \textbf{Borrar usuario :} Elimina un usuario. No elimina los trabajos ni grupos pertenecientes al usuario.
+\item \textbf{Mostrar la contraseña del usuario.}
+\item \textbf{Listar usuario :} Muestra una lista con todos los nombres de usuarios existentes en el maestro.
+\end{itemize}

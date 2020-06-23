@@ -1,0 +1,22 @@
+El objetivo principal del proyecto es desarrollar e implementar un sistema que permita aprovechar el tiempo ocioso de computadores para realizar procesos definidos por usuarios, tal como se muestra en la figura \ref{fig:image03}.
+El perfil de los computadores objetivos son máquinas que se encuentran mucho tiempo siendo no utilizadas, como las máquinas dentro de un laboratorio de computación, que generalmente están encendidas sin que ningún usuario las ocupe.
+Esto excluye a notebooks u otros computadores portátiles dado que, por su naturaleza móvil, hace que no cumplan el perfil anteriormente expuesto dado que si un notebook no se está usando, generalmente el usuario tiende a apagarlos. Los computadores de laboratorio por lo general cuentan con un sistema operativo basado en Windows XP o Linux, por esta razón el sistema debe ser compatible con ambas plataformas.
+Los procesos definidos por el usuario corresponden a un conjunto de ejecuciones de un programa de línea de comandos. La ejecución del programa conforma la unidad básica de procesamiento dentro del sistema. Este hecho determina el nivel de paralelismo que maneja el sistema, que consta en correr varios procesos simultáneamente.
+El sistema debe estar enfocado en el procesamiento de grandes volúmenes de datos, lo que quiere decir que los usuarios del sistema pueden ejecutar en él una cantidad de procesos del orden de los cientos de miles.
+El segundo objetivo es proveer al sistema de una plataforma de comunicación en la forma de un salvapantallas que esté en cada computador que conforma el sistema. Esta plataforma de comunicación consiste en que usuarios con privilegios especiales pueden establecer conjuntos de páginas web para ser desplegadas cíclicamente por los salvapantallas de cada computador perteneciente a grupos determinados. Por ejemplo, las páginas pueden ser sitios institucionales que contengan noticias y avisos útiles para personas que frecuentan dichos computadores.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image03.eps}
+\end{center}
+\caption{Esquema del sistema de cluster virtual}
+\label{fig:image03}
+\end{figure}
+Para alcanzar los objetivos antes descritos se debe alcanzar una serie de etapas que comprenden los objetivos específicos del proyecto. Los objetivos específicos agrupados en sus respectivas etapas se describen a continuación:
+\paragraph{Análisis bibliográfico}
+Esta etapa consiste en un estudio sobre el tema de la computación distribuida. Los objetivos de esta etapa son obtener antecedentes generales sobre el contexto del proyecto, describir los requerimientos del sistema y los recursos disponibles que hacen factible su implementación, y analizar algunas de las soluciones existentes para establecer un punto base para el establecimiento de la arquitectura del proyecto.
+\paragraph{Diseño}
+El objetivo de esta etapa es traducir los objetivos del proyecto en el diseño de una solución, en específico, la arquitectura del sistema. En esta etapa se deben tratar los problemas lógicos que surgen y las metodologías que permiten solucionarlos. 
+\paragraph{Implementación}
+El objetivo de esta etapa es implementar la arquitectura del sistema en un software funcional. En esta etapa se deben tratar los problemas inherentes a la implementación y la forma en que se abordan para darles solución.
+\paragraph{Evaluación}
+Los objetivos de esta etapa consisten en crear una aplicación que utilice el sistema de cluster virtual y evaluar el rendimiento de éste.

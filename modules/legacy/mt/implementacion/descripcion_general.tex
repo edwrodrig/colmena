@@ -1,0 +1,12 @@
+El cluster virtual cuenta con cuatro piezas de software: el programa cliente, el programa maestro, el programa esclavo y el salvapantallas. La ejecución de estos programas determinan el rol que está cumpliendo una máquina en particular dentro del sistema. Por ejemplo, el maestro es el computador que se encuentre ejecutando el programa maestro como se muestra en la figura \ref{fig:image13}. Estos programas están construidos en C++ usando la bibliotecas \emph{framework Qt4}\cite{qtpage}, que tiene la cualidad de permitir portar fácilmente las aplicaciones a Windows y/o Linux entre otros sistemas operativos.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/image13.eps}
+\end{center}
+\caption{Esquema de roles de la arquitectura del cluster virtual con respecto a los diferentes programas}
+\label{fig:image13}
+\end{figure}
+El programa cliente es una simple aplicación de línea de comando que se conecta a través de TCP al programa maestro para ejecutar las funcionalidades que están habilitadas para los usuarios. El detalle de la comunicación entre el programa cliente y el programa maestro será descrito en el capítulo \ref{ref:chapter_comunicacion}.
+Los programas maestro y esclavo son más complejos que los otros dos, por eso cada uno tiene una sección para describir en detalle su implementación.
+
+El caso de la especificación de trabajos, tarea y resultados no es trivial por la condición de manejar grandes volúmenes de datos. Por esta razón la solución planteada es descrita en las secciones \ref{ref:implementacion_trabajo} y \ref{ref:implementacion_resultado}.

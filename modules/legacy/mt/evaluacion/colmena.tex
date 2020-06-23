@@ -1,0 +1,48 @@
+Colmena es el nombre que se le ha dado al sistema de cluster virtual. El nombre sigue con la tradición de tomar un nombre que tenga un contexto natural, tradición común de aplicaciones de software desarrolladas para el laboratorio PROFC. Actualmente Colmena está corriendo en la Universidad de Concepción usando el poder de cómputo de diversos laboratorios de ésta.
+\subsection{Estructura de la red de Colmena}
+En la figura \ref{fig:image15} se muestra la estructura del cluster virtual que está actualmente desplegado en la red de la Universidad de Concepción. El programa maestro se encuentra en uno de los servidores del PROFC. Los esclavos están distribuidos en diferentes grupos que comprenden los siguientes laboratorios:
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image15.eps}
+\caption{Estructura del cluster virtual Colmena de la Universidad de Concepción}
+\label{fig:image15}
+\end{figure}
+\begin{itemize}
+\item Laboratorio de redes del DIICC (10 computadores). 
+\item Laboratorio PROFC (5 computadores).
+\item Laboratorio de biología marina (20 computadores).
+\item Laboratorio de botánica (15 computadores). 
+\end{itemize}
+Además el servidor del PROFC alberga un sitio web para Colmena\cite{colmenapage} (figura \ref{fig:image16}) desde el cuál se puede acceder a las funciones del programa cliente, a excepción de las que se refieren a ingreso y manejo de proyectos, las cuales sólo se permiten de manera interna por medio de la aplicación de prueba descrita posteriormente en la sección \ref{ref:app_prueba}. La forma en que se instala el cluster virtual es detallada en el anexo \ref{anexo:instalacion_componentes}.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image16.eps}
+\caption{Página principal del portal del cluster virtual de la Universidad de Concepción}
+\label{fig:image16}
+\end{figure}
+\subsection{Comportamiento de programas esclavos}
+Las diferentes políticas de los laboratorios y formas de uso que los usuarios le dan a éstos repercuten en la disponibilidad de los esclavos para realizar cómputos. La frecuencia de computadores conectados de los laboratorios de detallan en la tabla \ref{table:table01}.
+\begin{table}
+\centering
+\begin{tabular}{ l | r | r | r | r || r || r}
+ \hline			
+   Laboratorio & Mañana & Mediodía & Tarde & Noche & Promedio & Fin de semana\\
+ \hline
+   PROFC & 0 & 4 & 0& 3 & 1.8333 & Si\\
+   DIICC Redes & 2 & 2 & 3 & 2 & 2.25& Si \\
+   Biología marina & 5 & 8 & 6 & 0 & 3& No \\
+   Botánica & 3 & 5  & 4 & 0 & 1.916& No \\
+   \hline  
+	Total  & 10 & 19  & 13& 5 & 9 & \\ 
+	\hline
+\end{tabular}
+\caption[Frecuencias de esclavos conectados por día]{Frecuencias de esclavos conectados por día. Las duraciones son: Mañana(8:00 a 12:00), Mediodía (12:00 a 14:00), Tarde (14:00 a 20:00), Noche (20:00 a 8:00). El promedio de esclavos conectados por día de semana. El valor fin de semana indica si el laboratorio está disponible los fines de semana. El promedio está en \texttt{computadores disponibles por hora}.}
+\label{table:table01}
+\end{table}
+El laboratorio PROFC en las horas laborales está completamente en uso, ya que su personal se encuentra trabajando. En horas de almuerzo y en las noches es cuando el poder de cómputo ocioso se encuentra disponible.
+
+Los computadores del laboratorio DIICC Redes poseen dos sistemas operativos, Windows y Linux, donde actualmente el programa esclavo se encuentra corriendo únicamente en Windows. Este laboratorio siempre se encuentra usado y la mayoría del tiempo se encuentran en sistema Linux, lo que disminuye el aprovechamiento del poder ocioso. A pesar de esto, son los que entregan el mayor poder de cómputo.
+
+Los dos laboratorios de la facultad de Cs. Naturales entregan la mayor parte la mayor cantidad de computadores conectados simultáneamente en algunos periodos. Sin embargo, su promedio es bajo, ya que es política de este laboratorio apagarse en las noches y los fines de semanas.
+
+Las mediciones de la tabla considera un día de semana. Si se hiciera la misma tabla considerando los fin de semanas, entonces se debe tener en cuenta que los laboratorios que no están disponibles en este período bajarán su disponibilidad de poder de cómputo promedio.
+
+Adicional a estas mediciones, se ha registrado un peak de 25 computadores simultáneamente disponibles. Esto ocurrió durante el mediodía.

@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 25
+/svn/vc3/!svn/ver/4/slave
+END
+tasklist.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/vc3/!svn/ver/4/slave/tasklist.cpp
+END
+taskindex.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/1/slave/taskindex.hpp
+END
+task.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/vc3/!svn/ver/1/slave/task.cpp
+END
+tasklist.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/vc3/!svn/ver/1/slave/tasklist.hpp
+END
+slavemanager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/vc3/!svn/ver/1/slave/slavemanager.cpp
+END
+task_unix.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/1/slave/task_unix.cpp
+END
+slavemastercommunicator.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/vc3/!svn/ver/1/slave/slavemastercommunicator.cpp
+END
+task.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/vc3/!svn/ver/1/slave/task.hpp
+END
+slavemanager.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/vc3/!svn/ver/1/slave/slavemanager.hpp
+END
+slavekernel.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/vc3/!svn/ver/1/slave/slavekernel.cpp
+END
+slavemastercommunicator.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/vc3/!svn/ver/1/slave/slavemastercommunicator.hpp
+END
+task_win.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/vc3/!svn/ver/1/slave/task_win.cpp
+END
+slavekernel.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/vc3/!svn/ver/1/slave/slavekernel.hpp
+END
+colmena.qrc
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/vc3/!svn/ver/1/slave/colmena.qrc
+END
+qrc_colmena.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/vc3/!svn/ver/1/slave/qrc_colmena.cpp
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/vc3/!svn/ver/1/slave/main.cpp
+END
+colmena.pro
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/vc3/!svn/ver/1/slave/colmena.pro
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/vc3/!svn/ver/32/slave/Makefile
+END
+colmena
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/vc3/!svn/ver/32/slave/colmena
+END

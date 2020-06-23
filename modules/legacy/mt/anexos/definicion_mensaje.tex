@@ -1,0 +1,5 @@
+Los mensajes o paquetes de comunicación son descritos de la siguiente forma:
+\begin{center}
+\texttt{| tipo\_1 nombre\_1 | tipo\_2 nombre\_2 | ... | tipo\_n nombre\_n |\\origen>destino}
+\end{center}
+donde la línea superior separa los campos del mensaje con \texttt{|}. Cada campo tiene dos palabras donde la primera describe el tipo de dato que tiene y el segundo es un nombre identificador. En la segunda línea se describe la dirección en que va el mensaje. Tanto \texttt{origen} como \texttt{destino} son identificadores de entidades. El sentido del caracter \texttt{>} determina cual es la orientación de la comunicación. Eventualmente las dos líneas pueden encontrarse concatenadas en una sola por conveniencia.

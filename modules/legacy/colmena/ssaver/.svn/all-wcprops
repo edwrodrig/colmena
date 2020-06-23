@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/vc3/!svn/ver/1/ssaver
+END
+saver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/ssaver/saver.cpp
+END
+bhttp.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/ssaver/bhttp.cpp
+END
+main_win.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/1/ssaver/main_win.cpp
+END
+sscolmena.pro
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/vc3/!svn/ver/1/ssaver/sscolmena.pro
+END
+config.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/vc3/!svn/ver/1/ssaver/config.cpp
+END
+saver.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/ssaver/saver.hpp
+END
+bhttp.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/ssaver/bhttp.hpp
+END
+main_unix.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/vc3/!svn/ver/1/ssaver/main_unix.cpp
+END
+sscolmena.qrc
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/vc3/!svn/ver/1/ssaver/sscolmena.qrc
+END
+config.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/vc3/!svn/ver/1/ssaver/config.hpp
+END

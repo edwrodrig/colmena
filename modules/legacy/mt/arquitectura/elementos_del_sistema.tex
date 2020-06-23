@@ -1,0 +1,19 @@
+En esta sección se describen los diferentes elementos que son parte del sistema. También se definen conceptos necesarios para el desarrollo de las próximas secciones del documento.
+\paragraph{Cliente}
+Proceso que sirve como medio para que los usuarios interactúen con el cluster virtual. Principalmente esta interacción está enfocada al ingreso de \emph{trabajos} al sistema y su manipulación. Este proceso también permite la administración de diferentes aspectos del funcionamiento del sistema tales como cuentas de usuarios y administración de esclavos.
+\paragraph{Maestro}
+Proceso central del sistema de cluster virtual que es el nexo entre los clientes y los esclavos. Posee dos funciones primordiales: recibir y procesar las peticiones de los clientes, y coordinar a los esclavos para la ejecución de los trabajos. 
+\paragraph{Esclavo}
+Proceso que reside en los nodos destinados al cómputo. La función de este programa es recibir las tareas desde el maestro y ejecutarlas localmente. Luego de terminadas, el esclavo retorna el resultado de la tarea al maestro.
+\paragraph{Tarea}
+Es la unidad atómica de procesamiento dentro del sistema. Se define como una ejecución de un aplicación de línea de comando, la que puede comprender argumentos, archivos de entrada y salida, y la entrada y salida estándar. Esto es lo que el maestro distribuye a los esclavos para su ejecución. El aprovechamiento del potencial de cómputo del sistema se debe al paralelismo que permite la división de un problema en múltiples ejecuciones de un programa.
+\paragraph{Trabajo}
+Es un conjunto lógico de procesamiento que corresponde a un conjunto de tareas que están relacionados por algún criterio definido por el usuario. El concepto de trabajo existe dentro del sistema porque dada la naturaleza de éste, el poder de cómputo de muchos computadores es solo aprovechable cuando hay un conjunto numeroso de tareas ya que es en este nivel donde ocurre el paralelismo. Los trabajos son construidos por el cliente.
+\paragraph{Aplicación}
+Es un programa disponible en el cluster virtual para la ejecución de tareas. Cada esclavo tiene un conjunto de aplicaciones disponibles que determina las tareas que puede o no ejecutar.
+\paragraph{Usuario}
+Un usuario es una entidad registrada en el sistema que tiene un determinado control sobre algunos elementos del sistema. Generalmente un usuario tiene control sobre los trabajos que ingresa, pero existen otros tipos de usuarios que tienen control sobre otras características vinculadas al funcionamiento del sistema como control sobre esclavos, estadísticas del sistema, control sobre usuarios, control sobre los grupos, etc.
+\paragraph{Salvapantallas}
+Es un elemento opcional puede estar en las máquinas esclavas para determinar cuándo un esclavo está disponible o no para su uso en la ejecución de tareas. Como su nombre lo dice, es un salvapantallas que funciona de la manera tradicional, es decir, cuando el computador esta inactivo, el salvapantallas se despliega y notifica al esclavo. Si un esclavo no cuenta con un salvapantallas entonces no puede determinar su estado de disponibilidad automáticamente sino debe hacerlo manualmente.
+\paragraph{Grupo}
+Un grupo es un conjunto de esclavos que comparten un mismo comportamiento de salvapantallas, es decir, muestran un mismo conjunto de páginas web. Estas páginas pueden ser establecidas y administradas por el usuario dueño del grupo\footnote{Los grupos y su rol dentro del sistema es explicado en la subsección \ref{ref:arquitectura_salvapantallas}}.

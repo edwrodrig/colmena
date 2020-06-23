@@ -1,0 +1,10 @@
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image02.eps}
+\end{center}
+\caption{Las capas de comunicación de Q$^2$ADPZ}
+\label{fig:image02}
+\end{figure}
+La comunicación en Q$^{2}$ADPZ está basada en UDP, un protocolo de comunicación poco fiable, en donde no está garantizado que los paquetes enviados lleguen a su destino y si lo hacen, puede que no lleguen en el orden correcto. La ventaja de UDP sobre su alternativa, TCP, es su rapidez gracias a que carece de múltiples mecanismos enfocados en la conexión que implican una carga adicional a la comunicación. Esta base conforma la primera capa de abstracción llamada \emph{socket UDP} que tiene como propósito la transmisión de mensajes de control usados dentro del sistema. Sobre esta base de comunicación UDP, existe una capa superior de abstracción llamada \emph{confirmación UDP}. El propósito de esta capa es darle más fiabilidad a UDP mediante mensajes de confirmación para los mensajes enviados.
+
+La siguiente capa es el \emph{centro de mensajes} que recibe y envía mensajes de alto nivel - elementos XML. Estos mensajes son intercambiados en formato XML de acuerdo al protocolo definido para las comunicaciones cliente-maestro y maestro-esclavo. Esta capa es sólamente utilizada para propósitos de control de las entidades del sistema. Para transferir los archivos necesarios para la ejecución de tareas se utiliza el protocolo HTTP.  La figura \ref{fig:image02} grafica el modelo de comunicación antes descrito.

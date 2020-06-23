@@ -1,0 +1,88 @@
+En esta sección se explicitan aspectos mencionados en los objetivos como las características de las demandas de cómputo que el sistema está orientado a satisfacer como también un modelo de rendimiento del sistema y los recursos disponibles que hacen factible al sistema como una solución viable.
+\subsection{Problemática : Caso PROFC} \label{ref:antecedentes_problematica}
+La problemática que pretende solucionar el sistema del presente proyecto se puede caracterizar en el caso específico del PROFC.
+Actualmente en el PROFC se están desarrollando nuevas técnicas de análisis metagenómico sobre conjuntos de secuencias de ADN. Estos conjuntos tienen cantidades superior a los miles de secuencias. Las nuevas metodologías de análisis comprenden reiteradas ejecuciones de un programa de línea de comando sobre todas las secuencias de estos conjuntos. Por ejemplo, una de estas técnicas llamada \emph{alineamiento comparativo}, contrasta un conjunto de secuencias con un número determinado de genomas\footnote{los que también son secuencias}. Esta comparación implica ejecutar 2 veces un programa de línea de comando por cada par secuencia-genoma. Por ejemplo, si se quiere constrastar 10000 secuencias con 3 genomas, entonces se tendrían que correr 60000 procesos.
+
+Una característica importante de estos procesos es que sus datos de entrada y salida son relativamente pequeños. Estos consisten en secuencias de ADN que corresponden a cadenas de texto ASCII que están en el orden de los miles de caracteres. Un caracter tiene un tamaño de 1 byte, por lo tanto las cadenas de ADN están en el orden de los kiloBytes. Los rangos van generalmente desde 1 kB hasta 500 kB. Estás cadenas poseen la característica de ser altamente comprimibles quedando reducidas a unos pocos bytes. Esto hace que tales datos tomen un tiempo despreciable en transferirse por una red actual. Transferir datos de tamaño dentro del rango de 1kB a 500 kB toma menos de 1 segundo en una red LAN basada en Ethernet.
+\subsubsection{Poder de cómputo disponible}
+El PROFC cuenta con dos servidores que tienen las siguientes características :
+\begin{itemize}
+\item \textbf{Procesador :} 2 Intel Xeon 5120 Dual Core @ 1.86 GHz , 4056 KB Cache.
+\item \textbf{Memoria principal :} 8 GB (8059744 KB) RAM.  
+\item \textbf{Memoria secundaria :} Disco Duro SATA de 282 GB.
+\end{itemize}
+Actualmente estos servidores están siendo utilizados para albergar servicios que se listan a continuación :
+\begin{itemize}
+\item Servidor 1 :
+\begin{itemize}
+\item Hosting de páginas web.
+\item Servicio de análisis filogenético Bosque.
+\end{itemize}
+\item Servidor 2 :
+\begin{itemize}
+\item Servicio de análisis metagenómico Tundra.
+\end{itemize}
+\end{itemize}
+El servidor 1 está completamente dedicado a albergar el servicio Bosque que abarca la mayor parte de sus recursos. El servidor 2 es el que está dedicado al análisis metagenómico. Teniendo en cuenta lo anterior, para cuantificar el poder de cómputo disponible por el PROFC, en el servidor 2 se corrieron diferentes \emph{alineamientos comparativos} que comprenden diferentes número de ejecuciones y se registró el tiempo que tomaban. Estos resultados son expuestos en la tabla \ref{table:table03}. 
+\begin{table}
+\centering
+\begin{tabular}{ r | r | r }
+ \hline			
+   Ejecuciones & Tiempo total & Tiempo promedio\\
+ \hline
+   106 & 1:08:50 & 39\\
+   128 & 1:29:36 & 42\\
+   462 & 3:51:00 & 30\\
+   658 & 3:28:22 & 19\\
+   1050 & 8:45:00 & 30\\
+   1232 & 7:52:16 & 23\\
+   15754 & 87:31:20 & 20\\
+   17108 & 95:18:04 & 20\\
+   27910 & 100:49:10 & 13\\   
+   125420 & 2334:31:20 & 67\\
+\hline
+\end{tabular}
+\caption[Tabla de ejecuciónes de prueba]{Tabla de ejecuciones de prueba. Cada fila muestra la información de un conjunto de ejecuciones que fueron ejecutadas una tras otra en el servidor del PROFC. La columna \emph{ejecuciones} muestra el número de ejecuciones que tiene cada conjunto. La columna \emph{tiempo total} muestra el tiempo que se demora el servidor del PROFC en terminar todas las ejecuciones. La columna \emph{tiempo promedio} muestra el tiempo promedio que toma cada ejecución (t$_{total}/$ejecuciones)}
+\label{table:table03}
+\end{table}
+Como se dijo anteriormente, los conjuntos de secuencias tienen una cardinalidad superior a las 1000 secuencias. Por eso los casos con menos de 2000 ejecuciones son simplemente de prueba y se hicieron con el objetivos de cuantificar el tiempo tomado en completar un \emph{análisis comparativo} en esas situaciones. Los casos con más de 2000 ejecuciones son problemas reales, en ellos se ve el orden de tiempo que toma resolverlos. El caso de 15754 ejecuciones toma un tiempo de 87:31:20 equivalente a aproximadamente 3 días y medio. El set de datos correspondiente a este problema aún es considerado pequeño por los investigadores. El caso con 125420 ejecuciones es más cercano a los set de datos comunes y se ve que el tiempo que tomó fue de 2334 horas correspondiente a aproximandamente 97 días (3 meses) que claramente es un tiempo no aceptable.
+\subsection{Proyección de desempeño del sistema}
+Suponiendo que se tiene un conjunto de computadores conectados a una red a los que se le puede enviar procesos. Cada computador puede cambiar de disponible a no disponible en forma aleatoria. También se considera que los computadores tiene un poder de cómputo similar (toman el mismo tiempo en ejecutar un mismo proceso).
+Sean 
+\begin{itemize}
+\item $n_p$ : número de procesos.
+\item $n_c$ : número promedio de computadores disponibles.
+\item $t_e$ : tiempo promedio de ejecución de un proceso en un computador.
+\item $t_t$ : tiempo promedio de transferencia de datos de entrada y salida del proceso.
+\end{itemize}
+Entonces el tiempo $T$ que tomaría un número promedio de $n_c$ de computadores en terminar $n_p$ procesos es :
+\begin{equation}
+   T(n_p,n_c,t_e,t_t) = \frac{n_p(t_e + t_t)}{n_c}
+\end{equation}
+Esta función sirve también para calcular el tiempo que tomaría un solo computador en ejecutar los $n_p$ procesos. Este caso estaría caracterizado considerando $t_t = 0$ y $n_c = 1$ :
+\begin{equation}
+   T(n_p,1,t_e,0) = \frac{n_p(t_e + 0)}{1} = n_pt_e
+\end{equation}
+Una condición básica que debe cumplir el sistema es que debe ser más rápido que un solo computador para resolver un mismo problema. Esta condición se puede caracterizar con la siguiente inecuación :
+\begin{eqnarray}
+   T(n_p,1,t_e,0) & > & T(n_p,n_c,t_e,t_t)\\
+   n_pt_e &>& \frac{n_p(t_e + t_t)}{n_c} \label{eq:eq2}
+\end{eqnarray}
+Despejando el lado derecho de la inecuación \ref{eq:eq2} se obtiene:
+\begin{equation}
+\frac{t_e}{t_t}(n_c-1)>1
+\label{eq:eq1}
+\end{equation}
+De la inecuación \ref{eq:eq1} se pueden obtener las siguientes observaciones :
+\begin{itemize}
+\item La razón entre el tiempo de ejecución $t_e$ y el tiempo de transferencia $t_t$ debe ser la mayor, en otras palabras, $t_t$ debe ser pequeño en comparación a $t_e$. Esto se debe a que entre más grande sea $t_e$ y más insignificante sea $t_t$, más se tiende al caso ideal donde el retraso por transferencia es cero.
+\item Entre mayor sea el número de computadores $n_c$ disponibles, mayor es el aprovechamiento del cluster virtual. Esto es una observación que responde al sentido común ya que entre más computadores se tengan, más procesos simultaneos se pueden ejecutar.
+\end{itemize}
+\subsection{Recursos disponibles}
+Para implantar el cluster virtual se dispone de 40 computadores distribuidos en los siguientes laboratorios :
+\begin{itemize}
+\item Laboratorio PROFC (5 computadores).
+\item Laboratorio de biología marina (20 computadores).
+\item Laboratorio de botánica (15 computadores). 
+\end{itemize}
+Si bién estos computadores tienen diferente especificaciónes de hardware, el tiempo que se demoran en ejecutar un mismo proceso es similar al que se demora el servidor del PROFC\footnote{El hardware de los servidores está acondicionado para responder a un gran número de peticiones simultaneas pero no es notablemente superior a un computador de escritorio en correr un programa de línea de comandos.}. Estimando que se tiene en promedio disponible un 20\% de los computadores (8 computadores), y considerando que las entradas y salidas de los procesos son pequeñas haciendo de los tiempos de transferencia despreciables ($t_t$ < 0.5 segundos), entonces se estima que los procesos terminarán 8 veces más rápido que al ejecutarlos serializados en un solo computador. Generalizando la anteriormente mencionado, si se dispone de  $n_c$ computadores, entonces los procesos terminarán $n_c$ veces más rápido que en un solo computador. En terminos prácticos, ese caso que se demoraba unos 3 meses en ejecutarse, con el cluster virtual se demoraría solo 12 días, lo que significaría un beneficio considerable claramente percibible por los usuarios.

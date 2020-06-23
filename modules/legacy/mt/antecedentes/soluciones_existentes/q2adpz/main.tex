@@ -1,0 +1,16 @@
+\emph{Q$^{2}$ADPZ} (\textbf{Q}uite \textbf{A}dvanced \textbf{D}istributed \textbf{P}arallel \textbf{Z}ystem), es un sistema de computación distribuida, multiplataforma y multiusuario para computadores de escritorio no dedicados dentro de una red TCP/IP. El poder de un gran número de computadores ociosos es utilizado por usuarios que pueden ingresar tareas además de monitorear su progreso. La flexibilidad del sistema implica varios modos en que las aplicaciones pueden ser ejecutadas. Tanto los programas de la tareas, los requerimientos de hardware y los archivos de entrada y salida son automáticamente manipulados por el sistema. Q$^{2}$ADPZ usa un protocolo de comunicación interno basado en mensajes en formato XML.
+\subsubsection{Características}
+\input{antecedentes/soluciones_existentes/q2adpz/caracteristicas.tex}
+\subsubsection{Modos de uso}
+\input{antecedentes/soluciones_existentes/q2adpz/modos_de_uso.tex}
+\subsubsection{Arquitectura}
+\input{antecedentes/soluciones_existentes/q2adpz/arquitectura.tex}
+\subsubsection{Comunicación}
+\input{antecedentes/soluciones_existentes/q2adpz/comunicacion.tex}
+\subsubsection{Desventajas}
+Q$^{2}$ADPZ es un sistema muy similar al propuesto en este proyecto pero posee ciertas características que son poco deseables y otras con las que no cuenta. Estas características se nombran a continuación:
+\begin{itemize}
+\item Q$^{2}$ADPZ maneja la transmisión de archivos mediante un servidor web HTTP simple. Lo que requiere la puesta en marcha de un servicio web anexo al del sistema en sí. Además un simple directorio web, sin una estructuración especial no es lo más apropiado para manejar grandes cantidades de archivos\cite{filesystem}, lo que hace que Q$^{2}$ADPZ no soporte el trabajo con grandes conjuntos de datos.
+\item Q$^{2}$ADPZ no permite comunicación de sus componentes a través de NATs. Esto es crítico dada las arquitecturas de red que existen en la actualidad, en específico con la que cuenta la red de la Universidad de Concepción.
+\item La comunicación de Q$^{2}$ADPZ se basa en mensajes en formato XML que son demasiado pesados puesto que añade una serie de tags a los datos que codifica, congestionando el flujo de red.
+\end{itemize}

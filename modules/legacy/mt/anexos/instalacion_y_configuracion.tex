@@ -1,0 +1,154 @@
+\section{Instalación del programa maestro}
+Para instalar el programa maestro en un computador simplemente se necesita copiar el ejecutable\footnote{\texttt{master.exe} en Windows, \texttt{master} en otros sistemas operativos} en una carpeta y tener configuradas las bibliotecas de tiempo de ejecución de Qt4 en el sistema operativo. Estas bibliotecas se encuentran disponibles en la página \url{http://www.qtsoftware.com/downloads}. En los sistemas operativos basados en Windows NT, para tener las librerias disponibles simplemente se necesitan copiar los dll correspondientes en la misma carpeta en la que se encuentra el ejecutable.
+\section{Configuración del programa maestro}
+Para ver todas las opciones de que tiene el programa maestro hay que ejecutar en la línea de comando \texttt{master help}, entonces aparecerá la siguiente salida.
+\begin{verbatim}
+master                        Run VC Master
+master [help]                 Show Help
+master info                   Show configuration info
+master setslaveport port      Set master slave listen port
+master setclientport port     Set master client listen port
+master setslavetimeout msecs  Set master slave delete timeout time
+master setrootpassword pass   Set master root password
+\end{verbatim}
+\subsection{Asignación del puerto de comunicación de esclavos}
+El puerto de comunicación de esclavos, es el puerto UDP por el cual el programa maestro recibe los mensajes de los esclavos. Si se posee un cortafuegos, hay que cerciorarse que el computador que correrá el programa maestro tenga tal puerto abierto. Por defecto, el programa maestro tiene asignado el puerto 40000 para tal fin. Si se desea cambiar el puerto por defecto se puede hacer con el comando \texttt{master setslaveport port} donde \texttt{port} es el nuevo puerto a asignar.
+\begin{ejemplo} Si se desea asignar el puerto 4000 como puerto de comunicación de esclavos entonces se debe ingresar por la línea de comando \texttt{master setslaveport 4000}.
+\end{ejemplo}
+\subsection{Asignación del puerto de comunicación de clientes}
+El puerto de comunicación de clientes, es el puerto TCP por el cual el programa maestro se comunica con los clientes. Si se posee un cortafuegos, hay que cerciorarse que el computador que correrá el programa maestro tenga tal puerto abierto. Por defecto, el programa maestro tiene asignado el puerto 50000 para tal fin. Si se desea cambiar el puerto por defecto se puede hacer con el comando \texttt{master setclientport port} donde \texttt{port} es el nuevo puerto a asignar.
+\begin{ejemplo} Si se desea asignar el puerto 5000 como puerto de comunicación de clientes entonces se debe ingresar por línea de comando \texttt{master setslaveport 5000}.
+\end{ejemplo}
+\subsection{Configuración del tiempo de espera de esclavos}
+El tiempo de espera de esclavos es el lapso de tiempo de espera desde el último mensaje recibido de un esclavo donde si no se ha recibido un nuevo mensaje, entonces el esclavo es considerado por el maestro como desconectado y es eliminado de su lista de esclavos disponibles. Por defecto, el tiempo de espera de esclavo es de 30000 milisegundos. Si se desea cambiar el tiempo de espera se puede hacer con el comando \texttt{master setslavetimeout msecs} donde \texttt{msecs} es el tiempo de espera en milisegundos a asignar.
+\begin{ejemplo} Si se desea configurar el tiempo de espera de esclavos en 1 minuto entonces se debe ingresar por línea de comando \texttt{master setslavetimeout 60000}.
+\end{ejemplo}
+\subsection{Asignación de la contraseña de administrador}
+El programa maestro posee una cuenta de administrador por defecto de usuario \texttt{root} y contraseña \texttt{pass}. Con esta cuenta de usuario se tiene control total sobre el sistema. Si se desea cambiar la contraseña de administrador se puede hacer con el comando \texttt{master setrootpassword pass} donde \texttt{pass} es la contraseña nueva.
+\begin{ejemplo} Si se desea asignar \texttt{root123} como contraseña entonces se debe ingresar por línea de comando \texttt{master setrootpassword root123}.
+\end{ejemplo}
+\subsection{Ver configuración actual del sistema}
+Con esta opción se puede ver los valores de la configuración del maestro vigentes. Para verlos simplemente hay que ingresar en el comando \texttt{master info}. Si la configuración del maestro solo tiene valores por defecto, entonces la salida mostrada debería ser:
+\begin{verbatim}
+Slave Listen Port  : 40000
+Client Listen Port : 50000
+Slave Timeout      : 30000
+Root Password      : pass
+\end{verbatim}
+Si se hubieran reasignado los valores de la configuración con los establecidos en los ejemplos descritos anteriormente, entonces la salida sería:
+\begin{verbatim}
+Slave Listen Port  : 4000
+Client Listen Port : 5000
+Slave Timeout      : 60000
+Root Password      : root123
+\end{verbatim}
+\section{Ejecución del programa maestro}
+Para correr el programa maestro simplemente hay que ingresar el comando \texttt{master} para levantar el cluster virtual. El programa maestro es un proceso permanente, por eso se recomienda ejecutarlo como un proceso de fondo. Al ejecutar el programa maestro aparecerá la siguiente salida:
+\begin{verbatim}
+======================================
+        Virtual Cluster System
+    by Edwin Rodriguez Leon (2009)
+======================================
+           Master App v0.01
+======================================
+Loading configuration...
+Configuration loaded.
+Creating Database...
+Database opened.
+Init server...
+Server running at port 40000 .
+Listening clients at port 50000 .
+\end{verbatim}
+En este punto, el cluster virtual ya se encuentra funcionando, pero sin ningún esclavo al que se le puedan enviar tareas para su procesamiento. Sin embargo esta listo para recibir tareas y agregar esclavos al sistema.
+\section{Instalación del programa esclavo}
+La instalación básica del programa esclavo es similar al del programa maestro es en un computador simplemente se necesita copiar el ejecutable\footnote{\texttt{colmena.exe} en Windows, \texttt{colmena} en Linux} en la carpeta de Colmena\footnote{\texttt{C:{\textbackslash}colmena} en Windows, \texttt{/usr/local/colmena} en Linux} y tener configuradas las bibliotecas de tiempo de ejecución de Qt4 en el sistema operativo.
+\subsection{Agregar aplicaciones al programa esclavo}
+Para agregar aplicaciones al sistema simplemente se deben copiar los archivos en la carpeta \texttt{apps} dentro de la carpeta principal de Colmena. Si las aplicaciones necesitan la configuración de variables de entornos entonces se pueden definir agregando un archivo de texto en la carpeta \texttt{envvars}. Este archivo de texto debe tener el siguiente formato.
+\begin{verbatim}
+NOMBRE_VARIABLE_ENTORNO_1
+VALOR_VARIABLE_ENTORNO_1
+NOMBRE_VARIABLE_ENTORNO_2
+VALOR_VARIABLE_ENTORNO_2
+...
+NOMBRE_VARIABLE_ENTORNO_n
+VALOR_VARIABLE_ENTORNO_n
+\end{verbatim}
+No hay diferencia en agregar una variable de entorno a un archivo existente o crear un nuevo archivo donde se defina.
+\subsection{Instalación para modo salvapantallas}
+Si se desea que el esclavo funciona solamente cuando esté en modo salvapantallas, entonces adicionalmente a lo descrito en los pasos anteriores se deben copiar los archivos correspondientes al salvapantallas\footnote{\texttt{sscolmena.scr}} y al programa de seteo de prioridad de procesos\footnote{\texttt{SetPriority.exe}}. El archivo \texttt{sscolmena.scr} debe ser instalado en el sistema operativo\footnote{apretar con el botón derecho el archivo y seleccionar la opción \emph{Instalar}}. 
+\section{Configuración del programa esclavo}
+Para ver todas las opciones de que tiene el programa esclavo hay que ejecutar en la línea de comando \texttt{colmena help}, entonces aparecerá la siguiente salida.
+\begin{verbatim}
+Usage :
+run                    Run VC Slave
+[help]                 Show Help
+info                   Show configuration info
+setmasterip ip         Set slave master ip
+setmasterport port     Set slave master port
+setlistenport port     Set slave listen port
+setmaxtasks tasks      Set slave max tasks
+setpriority priority   Set if slave is always on high priority
+setgroup group         Set slave group
+setssaverport port     Set ssaver port
+\end{verbatim}
+\subsection{Asignación de la dirección IP del maestro}
+La dirección IP del maestro, es la dirección IP del computador que está corriento el programa maestro. Por defecto, el programa esclavo tiene asignada la dirección \texttt{127.0.0.1 (localhost)} para tal fin la cual no corresponde en la mayoría de los casos a menos que el programa maestro este corriendo en la misma máquina que el esclavo. Si se desea cambiar el puerto por defecto se puede hacer con el comando \texttt{master setmasterip ip} donde \texttt{ip} es la nueva dirección a asignar.
+\begin{ejemplo} Si se desea asignar la ip 152.1.2.3 como dirección IP del maestro entonces se debe ingresar por la línea de comando \texttt{colmena setmasterip 152.1.2.3}.
+\end{ejemplo}
+\subsection{Asignación del puerto de comunicación del maestro}
+El puerto de comunicación del maestro, es el puerto UDP por el cual el programa maestro establece la comunicación con los esclavos. Por defecto, el programa esclavo tiene asignado el puerto 40000. Si se desea cambiar el puerto por defecto se puede hacer con el comando \texttt{colmena setmasterport port} donde \texttt{port} es el nuevo puerto a asignar.
+\begin{ejemplo} Si se desea asignar el puerto 4000 como puerto de comunicación del maestro entonces se debe ingresar por línea de comando \texttt{colmena setmasterport 4000}.
+\end{ejemplo}
+\subsection{Asignación del puerto de comunicación del esclavo}
+El puerto de comunicación del maestro es el puerto UDP por el cual el programa esclavo se comunica con el maestro. Si se posee un cortafuegos, hay que cerciorarse que el computador que correrá el programa esclavo tenga tal puerto abierto. Por defecto, el programa esclavo tiene asignado el puerto 40001. Si se desea cambiar el puerto por defecto se puede hacer con el comando \texttt{colmena setlistenport port} donde \texttt{port} es el nuevo puerto a asignar.
+\begin{ejemplo} Si se desea asignar el puerto 4001 como puerto de comunicación del maestro entonces se debe ingresar por línea de comando \texttt{colmena setlistenport 4001}.
+\end{ejemplo}
+\subsection{Configuración del número máximo de tareas simultaneas}
+Como su nombre lo dice, el número máximo de tareas simultaneas corresponde al límite de tareas que el esclavo puede ejecutar a la vez. Este valor es particularmente útil cuando se dispone de un computador con muchos procesadores disponibles. Por defecto, el número máximo de tareas simultaneas es 1. Si se desea cambiar este valor se puede hacer con el comando \texttt{colmena setmaxtasks tasks} donde \texttt{tasks} es el nuevo máximo a asignar.
+\begin{ejemplo} Si se desea configurar el número máximo de tareas simultaneas en 2 tareas simultaneas entonces se debe ingresar por linea de comando \texttt{colmena setmaxtasks 2}.
+\end{ejemplo}
+\subsection{Asignación de la prioridad del esclavo}
+La prioridad del esclavo es un valor booleano que establece si el seclavo estará en modo dedicado o no.Si el valor es \texttt{0} entonces el esclavo solo recibirá tareas cuando este en modo salvapantallas. Si el valor es \texttt{1} entonces se asume que el esclavo esta en modo dedicado y recibirá tareas siempre. Por defecto, el esclavo esta configurado para que funcione en modo no dedicado. Si se desea cambiar la prioridad del esclavo entonces se puede hacer con el comando \texttt{colmena setpriority priority} donde \texttt{priority} es el valor booleano correspondiente
+\begin{ejemplo} Si se desea asignar cambiar a modo dedicado entonces se debe ingresar por línea de comando \texttt{colmena setpriority 1}.
+\end{ejemplo}
+\subsection{Asignación del grupo del esclavo}
+Los esclavos son asociados en grupos que determinan las páginas que van a desplegar en sus salvapantallas. El grupo de un esclavo es el nombre del grupo a que pertenece es esclavo. Por defecto, el esclavo esta configurado sin ningún grupo. Si se desea cambiar la grupo del esclavo entonces se puede hacer con el comando \texttt{colmena setgroup group} donde \texttt{group} es el nombre del grupo.
+\begin{ejemplo} Si se desea asignar el grupo \texttt{profc} entonces se debe ingresar por línea de comando \texttt{colmena setgroup profc}.
+\end{ejemplo}
+\subsection{Asignación del puerto de comunicación del salvapantallas}
+El puerto de comunicación del salvapantallas es el puerto TCP por el cual el esclavo y el salvapantallas se comunican. Por defecto, el esclavo esta configurado con el puerto 18765. Si se desea cambiar el puerto de comunicación del salvapantallas se puede hacer con el comando \texttt{colmena setssaverport port} donde \texttt{port} es el nuevo puerto a asignar.
+\begin{ejemplo} Si se desea asignar el puerto 1876 como puerto de comunicación del salvapantallas entonces se debe ingresar por línea de comando \texttt{colmena setssaverport 1876}
+\end{ejemplo}
+\subsection{Ver configuración actual del esclavo}
+Con esta opción se puede ver los valores de la configuración del esclavo vigentes. Para verlos simplemente hay que ingresar en el comando \texttt{colmena info}. Si la configuración del esclavo solo tiene valores por defecto, entonces la salida mostrada debería ser:
+\begin{verbatim}
+Version                 : 0.02
+Master Ip               : 127.0.0.1
+Master Port             : 40000
+Listen Port             : 40001
+Max Tasks               : 1
+Always on high priority : 0
+Group                   : 
+Screensaver Port        : 18765
+\end{verbatim}
+Si se hubieran reasignado los valores de la configuración con los establecidos en los ejemplos descritos anteriormente, entonces la salida sería:
+\begin{verbatim}
+Version                 : 0.02
+Master Ip               : 152.1.2.3
+Master Port             : 4000
+Listen Port             : 4001
+Max Tasks               : 2
+Always on high priority : 1
+Group                   : profc
+Screensaver Port        : 1876
+\end{verbatim}
+\section{Ejecución del programa esclavo}
+Para correr el programa esclavo simplemente hay que ingresar el comando \texttt{colmena run}. El programa esclavo es un proceso permanente, por eso se recomienda ejecutarlo como un proceso de fondo. El programa esclavo se demora un poco en estar disponible para recibir tareas debido a las rutinas de reconocimiento y verificación de aplicaciones disponibles. Cuando el esclavo se encuentre disponible en la salida del maestro aparecerá un mensaje notificando este hecho :
+\begin{verbatim}
+New slave 1 arrived. Starting registering protocol.
+\end{verbatim}
+En este punto, el esclavo esta disponible para que el maestro le envíe tareas a ejecutar, en otras palabras, se ha agregado un nodo de cómputo adicional al cluster virtual.
+\section{Instalador automático del esclavo para Windows XP}
+Por conveniencia, se creó un programa instalador automático para Windows XP con InnoSetup\cite{innosetuppage} que tiene el fin de facilitar el proceso de configuración del esclavo. Este instalador deja el programa esclavo como un servicio de Windows permanente que esta preconfigurado para que se conecte a un maestro en específico.
+\section{Instalador de paquetes de aplicaciones para Windows XP}
+También existe un instalador de aplicaciones para el esclavo. Corriendo este instalador agrega automáticamente aplicaciones disponibles por el esclavo.

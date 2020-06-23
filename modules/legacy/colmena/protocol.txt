@@ -1,0 +1,30 @@
+name     src-dest	_value0		_value1		_value2		_enum0		_data	_word
+
+STATE         SM IDSLAVE NUMTASKS PRIORITY											start=init run=always
+REGISTERED    MS IDSLAVE															start=state run=once
+FULLSTATE     SM IDSLAVE MAXTASKS	GROUP											start=registered run=always close=fullstateack
+FULLSTATEACK  MS IDSLAVE GENERALLIST SPECIFICLIST									start=fullstate run=once	
+
+POSTTASK      MS IDSLAVE IDJOB IDTASK PROGRAM										start=state run=once
+NOTHAVEAPP    SM IDSLAVE PROGRAM															start=posttasknothaveapp run=once
+ACCEPTEDTASK  SM IDSLAVE IDJOB IDTASK												start=posttask run=always close=send
+SEND          ** IDSLAVE IDJOB IDTASK NUMPACK DATA								start=many run=always close=sendack
+SENDACK       ** IDSLAVE IDJOB IDTASK NUMPACK									start=send run=once
+
+RUNTASK       MS IDSLAVE IDJOB IDTASK										   start=lastsendack run=always close=runtaskack
+RUNTASKACK    SM IDSLAVE IDJOB IDTASK												start=runtask run=once
+
+ERRORTASK	  SM IDSLAVE IDJOB IDTASK											start=endtaskbad run=always close=deletejob
+
+FINISHED      SM IDSLAVE IDJOB IDTASK												start=endtask run=always close=getoutput
+GETOUTPUT	  MS IDSLAVE IDJOB IDTASK												start=finished run=once
+
+FREETASK      MS IDSLAVE IDJOB IDTASK												start=once run=once
+FREETASKACK	  SM IDSLAVE IDJOB IDTASK												start=freetask run=once
+
+PAGELIST	  MS IDSLAVE GENERALLIST SPECIFICLIST
+PAGELISTACK   SM IDSLAVE 
+
+RESET		  MS IDSLAVE
+
+  

@@ -1,0 +1,8 @@
+El sistema de cluster virtual posee una arquitectura cliente-maestro-esclavo muy similar a la de Q$^2$ADPZ. Un proceso central \emph{maestro} coordina a los procesos \emph{esclavos} que se encuentran en cada computador destinado a brindar poder de cómputo al sistema. El \emph{cliente} envía trabajos para procesar al maestro, el que una vez ingresados reparte en los diferentes esclavos que se encuentren a su disposición. Para establecer cuándo un esclavo se encuentra disponible, el esclavo cuenta con un salvapantallas, donde su activación significa que el esclavo se encuentra disponible para recibir tareas. Alternativamente el esclavo puede configurarse para que esté siempre disponible sin importar el estado del salvapantallas.
+
+Haciendo un paralelo con la arquitectura cliente-servidor, el cliente cumple la misma función, pero el servidor estaría compuesto por el maestro y los esclavos ya que en su conjunto son los que prestan servicios (de cómputo) a los usuarios. Es en esta analogía donde surge la visión de cluster virtual, ya que a diferencia de un cluster dedicado (servidor de cómputo), existe un conjunto de máquinas no dedicadas que el cliente puede disponer como si fuera un cluster dedicado (cluster virtual). En la figura \ref{fig:image06} se grafica la arquitectura del sistema.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image06.eps}
+\caption{La arquitectura del sistema de cluster virtual}
+\label{fig:image06}
+\end{figure}

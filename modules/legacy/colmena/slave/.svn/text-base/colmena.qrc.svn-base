@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>data/style.css</file>
+    <file>data/colmenalogo.jpg</file>
+    <file>data/udeclogo.jpg</file>
+	<file>data/udeclogobig.gif</file>
+</qresource>
+</RCC>

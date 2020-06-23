@@ -1,0 +1,17 @@
+El mismo problema mencionado para la especificación de trabajos está presente con la especificación de resultados. Los resultados son todos los archivos recuperados de la ejecución de todas las tareas de un trabajo. Es claro que el número de archivos de resultados es del mismo orden que la cantidad de archivos de entradas y por ello es que manejarlos simplemente como archivos es  poco deseable.
+
+El método para solucionar este problema es el mismo que se usó para los trabajos. Se usa un archivo SQLite3 con una sola tabla la que se describe a continuación:
+\subsubsection{Tabla archivos}
+\begin{verbatim}
+Archivos( tarea , nombre , datos )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{tarea :} Identificador de la tarea.
+\item \textbf{nombre:} Nombre del archivo de resultados.
+\item \textbf{datos:} Datos que contiene el archivo.
+\end{itemize}
+Cada entrada de esta tabla corresponde a un archivo de salida. Con el atributo \emph{nombre} y \emph{tarea} el usuario puede determinar a qué tarea corresponde el resultado. El código SQL de creación de la tabla es el siguiente:
+\begin{verbatim}
+CREATE TABLE files ( idtask INTEGER , filename TEXT , data TEXT ) ;
+\end{verbatim}

@@ -1,0 +1,18 @@
+El modo básico de uso de Q$^{2}$ADPZ es a través de una aplicación de línea de comando llamada \emph{cliente universal} y que le permite a los usuarios ingresar el programa a ejecutar. En este ingreso se puede especificar
+\begin{itemize}
+\item número de ejecuciones del programa,
+\item la ruta del ejecutable y los argumentos de línea de comando,
+\item archivos de entrada y salida,
+\item directorios donde residen los archivos,
+\item utilidades a ser ejecutadas después de las tareas individuales,
+\item tiempo máximo asignado para la ejecución de una tarea,
+\item el orden en que los grupos de tareas serán ejecutados,
+\item requerimientos de hardware (espacio en disco, memoria, velocidad y tipo de CPU) y software (sistema operativo y programas instalados).
+\end{itemize}
+
+Estos parámetros de configuración son guardados en un archivo en formato XML. El ejecutable puede ser obtenido desde el disco local o descargado desde alguna dirección URL. Los archivos de entrada y salida son transferidos a los esclavos usando un servidor web dedicado a los datos.
+
+Cada ejecución corresponde a una tarea - la unidad de cómputo más pequeña en Q$^{2}$ADPZ. Las tareas son agrupadas en trabajos - identificadas por un identificador y un nombre. El sistema permite la operación de control sobre tareas, trabajos y usuarios. Usuarios avanzados pueden crear el archivo de configuración manualmente o generarlo automáticamente.
+
+Usuarios aún más avanzados pueden prescindir del cliente universal y programar su propia \emph{aplicación cliente}\footnote{user client application} que se comunique directamente con el maestro, permitiendo ingresar tareas dinámicamente. Finalmente, los usuarios pueden programar sus propias \textit{bibliotecas esclavas}\footnote{user slave library} que en casos específicos son, por lo general, más rápidas que los programas ejecutables.
+

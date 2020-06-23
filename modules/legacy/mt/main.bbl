@@ -1,0 +1,180 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{AFG{\etalchar{+}}09}
+
+\bibitem[AFG{\etalchar{+}}09]{cloudcomputing}
+Michael Armbrust, Armando Fox, Rean Griffith, Anthony~D. Joseph, Randy~H. Katz,
+  Andrew Konwinski, Gunho Lee, David~A. Patterson, Ariel Rabkin, Ion Stoica,
+  and Matei Zaharia.
+\newblock Above the clouds: A berkeley view of cloud computing.
+\newblock Technical Report UCB/EECS-2009-28, EECS Department, University of
+  California, Berkeley, Feb 2009.
+\newblock Available from:
+  \url{http://www.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-28.html}.
+
+\bibitem[ama]{amazonwebservicespage}
+Amazon web services [online].
+\newblock Available from: \url{http://aws.amazon.com}.
+
+\bibitem[And04]{boinc}
+David Anderson.
+\newblock Boinc: A system for public-resource computing and storage.
+\newblock In {\em 5th IEEE/ACM International Workshop on Grid Computing},
+  November 2004.
+\newblock Available from: \url{http://boinc.berkeley.edu/grid_paper_04.pdf}.
+
+\bibitem[Buy99]{cluster}
+Rajkumar Buyya, editor.
+\newblock {\em High Performance Cluster Computing: Architectures and Systems},
+  volume~1, chapter~1, pages 3--5.
+\newblock Prentice Hall, 1999.
+
+\bibitem[col]{colmenapage}
+Colmena cluster virtual [online].
+\newblock Available from: \url{http://colmena.udec.cl}.
+
+\bibitem[CPP02]{q2adpz}
+Zoran Constantinescu, Pavel Petrovic, and Atle Pedersen.
+\newblock Q$^{2}$adpz: An open system for distributed computing.
+\newblock {\em ACM Crossroads}, 9(2):13--20, Diciembre 2002.
+\newblock Available from:
+  \url{http://www.idi.ntnu.no/~zoran/papers/qadpz-NordU2002.pdf}.
+
+\bibitem[DKV08]{gridcomputing1}
+Eleni Dafouli, Panagiotis Kokkinos, and Emmanouel~A. Varvarigos.
+\newblock Fair execution time estimation scheduling in computational grids.
+\newblock {\em Distributed and Parallel Systems}, pages 93--104, 2008.
+
+\bibitem[FGNC01]{xtremweb}
+Gilles Fedak, Cecile Germain, Vincent Neri, and Franck Cappello.
+\newblock Xtremweb: A generic global computing system.
+\newblock In {\em First IEEE International Symposium on Cluster Computing and
+  the Grid}, Mayo 2001.
+
+\bibitem[Fly72]{taxonomiaflynn}
+M.~J. Flynn.
+\newblock Some computer organizations and their effectiveness.
+\newblock {\em IEEE Trans. Computers}, C-21(9):948--960, Septiembre 1972.
+
+\bibitem[For08]{mpi}
+Message Pasing~Interface Forum.
+\newblock Mpi: A message-passing interface standard, Junio 2008.
+\newblock Available from: \url{http://www.mpi-forum.org/docs/mpi21-report.pdf}.
+
+\bibitem[Fos02a]{gridcomputing3}
+Ian Foster.
+\newblock The grid: A new infrastructure for 21st century science.
+\newblock {\em Physics Today}, 55(2):42--47, 2002.
+\newblock Available from:
+  \url{http://research.calit2.net/cibio/archived/thegrid.pdf}.
+
+\bibitem[Fos02b]{gridcomputing2}
+Ian Foster.
+\newblock What is the grid? a three point checklist.
+\newblock {\em GRIDToday}, Julio 2002.
+\newblock Available from:
+  \url{http://www-fp.mcs.anl.gov/~foster/Articles/WhatIsTheGrid.pdf}.
+
+\bibitem[FSK05]{udpholepunching}
+Bryan Ford, Pyda Srisuresh, and Dan Kegel.
+\newblock Peer-to-peer communication across network address translators.
+\newblock In {\em USENIX Annual Technical Conference}, 2005.
+\newblock Available from: \url{http://www.brynosaurus.com/pub/net/p2pnat/}.
+
+\bibitem[goo]{googleappenginepage}
+Google appengine [online].
+\newblock Available from: \url{http://code.google.com/appengine}.
+
+\bibitem[inn]{innosetuppage}
+Innosetup [online].
+\newblock Available from: \url{http://www.jrsoftware.org/isinfo.php}.
+
+\bibitem[KS08a]{distributedcomputing}
+Ajay~D. Kshemkalyani and Mukesh Singhal.
+\newblock {\em Distributed Computing: Principles, Algorithms, and Systems},
+  chapter~1, pages 5--10.
+\newblock Cambridge University Press, 2008.
+
+\bibitem[KS08b]{parallelcomputing}
+Ajay~D. Kshemkalyani and Mukesh Singhal.
+\newblock {\em Distributed Computing: Principles, Algorithms, and Systems},
+  chapter~1, pages 1--2.
+\newblock Cambridge University Press, 2008.
+
+\bibitem[KS08c]{p2pcomputing}
+Ajay~D. Kshemkalyani and Mukesh Singhal.
+\newblock {\em Distributed Computing: Principles, Algorithms, and Systems},
+  chapter~1, page~32.
+\newblock Cambridge University Press, 2008.
+
+\bibitem[KS08d]{taxonomiaflynn2}
+Ajay~D. Kshemkalyani and Mukesh Singhal.
+\newblock {\em Distributed Computing: Principles, Algorithms, and Systems},
+  chapter~1, pages 10--11.
+\newblock Cambridge University Press, 2008.
+
+\bibitem[LBRV05]{alchemi}
+Akshay Luther, Rajkumar Buyya, Rajiv Ranjan, and Srikumar Venugopal.
+\newblock Alchemi: A .net-based enterprise grid computing system.
+\newblock In {\em 6th International Conference on Internet Computing}, Junio
+  2005.
+
+\bibitem[mic]{microsoftazurepage}
+Microsoft azure [online].
+\newblock Available from: \url{http://www.microsoft.com/azure}.
+
+\bibitem[mil]{milkywayathomepage}
+Milkyway@home [online].
+\newblock Available from: \url{http://milkyway.cs.rpi.edu/milkyway}.
+
+\bibitem[pro]{profcpage}
+Laboratorio de procesos oceanográficos y clima [online].
+\newblock Available from: \url{http://www.profc.udec.cl/}.
+
+\bibitem[qt]{qtpage}
+Qt software [online].
+\newblock Available from: \url{http://www.qtsoftware.com}.
+
+\bibitem[qtd]{qtdocpage}
+Documentación de qt4 [online].
+\newblock Available from: \url{http://doc.qtsoftware.com/4.1/index.html}.
+
+\bibitem[seta]{setiathomepage}
+Seti@home [online].
+\newblock Available from: \url{http://setiathome.ssl.berkeley.edu}.
+
+\bibitem[setb]{setprioritypage}
+Setpriority for windows [online].
+\newblock Available from:
+  \url{http://gilchrist.ca/jeff/SetPriority/index.html}.
+
+\bibitem[sky]{skypepage}
+Skype [online].
+\newblock Available from: \url{http://www.skype.com/intl/en/}.
+
+\bibitem[sql]{sqlite3page}
+Sqlite3 [online].
+\newblock Available from: \url{http://www.sqlite.org}.
+
+\bibitem[svr]{svranypage}
+Cómo crear un servicio definido por el usuario [online].
+\newblock Available from: \url{http://support.microsoft.com/kb/137890}.
+
+\bibitem[Tan03]{nat}
+Andrew~S. Tanenbaum.
+\newblock {\em Redes de computadores}, chapter~4, pages 444--448.
+\newblock Pearson Prentice Hall, 2003.
+
+\bibitem[TM00]{filesystem}
+Philip Trautman and Jim Mostek.
+\newblock Scalability and performance in modern filesystems, 2000.
+\newblock Available from: \url{http://www.silicongraphics.net/pdfs/2668.pdf}.
+
+\bibitem[tun]{tundrapage}
+Tundra análisis metagenómico [online].
+\newblock Available from: \url{http://tundra.udec.cl}.
+
+\bibitem[zli]{zlibpage}
+Librería zlib [online].
+\newblock Available from: \url{http://ww.zlib.net/}.
+
+\end{thebibliography}

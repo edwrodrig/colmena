@@ -1,0 +1,87 @@
+En esta sección de describe el funcionamiento del sistema dedicado a satisfacer el principal objetivo del proyecto, la ejecución de trabajos y tareas.
+\subsection{Ingreso de trabajos}
+\subsubsection{Especificación de un trabajo}
+Para ingresar un trabajo se requiere crear la especificación de éste. Un trabajo, por definición es un conjunto de tareas, por lo tanto, un trabajo queda especificado por el conjunto de especificaciones de aquellas tareas. Las tareas se especifican con los siguientes valores:
+\begin{itemize}
+\item \textbf{Identificador} numérico único de la tarea dentro del trabajo. Este valor sirve para establecer el orden de las tareas dentro del trabajo.
+\item \textbf{Nombre del programa} a ejecutar.
+\item \textbf{Argumentos del programa} a ejecutar.
+\item \textbf{Entrada estándar} que recibirá el programa a la hora de ejecución.
+\item \textbf{Archivos de entrada} necesarios para la ejecución de la tarea.
+\item \textbf{Archivos de salida} a obtener al término de la ejecución.
+\end{itemize}
+Los detalles del formato de la especificación de trabajo se trata próximamente en la sección \ref{ref:implementacion_trabajo}.
+\subsubsection{Ingreso del trabajo}
+Con la creación de la especificación del trabajo se está listo para ingresarlo al cluster virtual para su ejecución. El cliente envía la especificación del trabajo al maestro para ser ingresada al sistema. El maestro, al recibir la especificación del trabajo, la agrega a su cola interna de trabajos y le asigna un identificador numérico que es notificado al cliente. El identificador numérico del trabajo sirve para que el cliente pueda ejecutar operaciones sobre el trabajo y obtener los resultados del trabajo. Resumiento, una vez dentro del maestro, el trabajo comprende los valores :
+\begin{itemize}
+\item \textbf{Identificador} único que el maestro ha asignado al trabajo. Este valor sirve para establecer el orden de los trabajos ingresados al maestro.
+\item \textbf{Usuario} que a ingresado el trabajo.
+\item \textbf{Especificación del trabajo} ingresada por el usuario.
+\end{itemize}
+\subsection{Cola de trabajos del maestro}
+Como se mencionó anteriormente, el maestro cuenta con una cola de trabajos (figura \ref{fig:image07}. Esta cola contiene los trabajos que han sido ingresados al sistema para su ejecución. Esta cola es de caracter FIFO\footnote{El primero que entra es el primero en salir (First In First Out)}, es decir, los trabajos son ejecutados en orden de ingreso. Dado que el trabajo no es la unidad atómica dentro sistema sino las tareas, la cola de trabajos es una cola de tareas donde las tareas de un trabajo van ordenadas según el orden de los trabajos y en segunda medida, por el orden que las tareas tengan dentro del trabajo. A cada tarea en esta cola se le asigna una variable de estado que indica su estado de ejecución. El estado de ejecución puede tener tres valores :
+\begin{itemize}
+\item \textbf{Disponible :} La tarea esta disponible para ser procesada.
+\item \textbf{En ejecución :} La tarea está siendo ejecutada por un esclavo.
+\item \textbf{Completada :}  La tarea a sido ejecutada y ya han sido recepcionados sus resultados (archivos de salida).
+\end{itemize}
+El estado de ejecución de una tarea sirve para calcular el número de tareas completadas dentro de un trabajo.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/image07.eps}
+\end{center}
+\caption[Diagrama de la cola de trabajos del maestro]{Diagrama de la cola de trabajos del maestro. Los trabajos son ingresados en la base de la cola mientras los esclavos ejecutan las tareas que se encuentran en la cima}
+\label{fig:image07}
+\end{figure}
+\subsection{Operaciones sobre trabajos}
+El sistema permite hacer operaciones sobre los trabajos ingresados al sistema. Estas operaciones se listan a continuación:
+\begin{itemize}
+\item \textbf{Borrar un trabajo :} Esta función permite sacar un trabajo de la cola del maestro. Al ser borrado se cancelan todas las tareas en ejecución y se pierden permanentemente los resultados obtenidos. 
+\item \textbf{Obtener la información de un trabajo :} Muestra información sobre el estado del trabajo. Muestra el identificador numérico del trabajo, el usuario que lo ingresó, el total de tareas que lo componen y las tareas completadas al momento.
+\item \textbf{Obtener el resultado de un trabajo :} Obtiene los archivos de salida de todas las tareas de un trabajo. Sólo es posible obtener el resultado cuando el trabajo ha terminado (cuando las tareas completadas es igual al total).
+\item \textbf{Listar los trabajos :} Esta función lista los trabajos que están en el sistema por orden de ingreso. Lista tanto los trabajos ejecutados como los que se encuentran ejecutándose o por ejecutar. La lista muestra los identificadores númericos del trabajo y el usuario que lo ingresó.
+\item \textbf{Borrar una tarea de un trabajo :} Borra una tarea de un trabajo. No importa si la tarea ha sido ejecutada o está por ejecutarse. Si está actualmente en ejecución, la tarea es cancelada y eliminada. Si la tarea fue ejecutada, elimina los resultados de su ejecución.
+\item \textbf{Obtener la información de una tarea de un trabajo :} Muestra la información sobre una tarea. Muestra el identificador numérico de la tarea dentro del trabajo, el nombre del programa a ejecutar, los argumentos del programa y el nombre del archivo de resultado a obtener.
+\item \textbf{Listar las tareas de un trabajo :} Lista las tareas de un trabajo. La lista muestra el identificador numérico de la tarea dentro del trabajo y el programa a ejecutar.
+\end{itemize}
+Los usuarios pueden acceder a estas funcionalidades mediante el programa cliente.
+\subsection{Lista de estado de los esclavos}
+El maestro maneja los estados de todos los esclavos conectados al maestro. El estado de un esclavo es actualizado periódicamente y consta de los siguiente valores:
+\begin{itemize}
+\item \textbf{Identificador del esclavo :} Identificador numérico que el maestro le ha asignado al esclavo cuando ingresó al sistema.
+\item \textbf{Número de tareas :} Número de tareas que el esclavo está ejecutando actualmente.
+\item \textbf{Número máximo de tareas :} Máximo de tareas simultáneas que el esclavo puede ejecutar. Este parámetro es un valor configurado en el programa esclavo y es establecido manualmente.
+\item \textbf{Disponibilidad :} Indica si el esclavo se encuentra en estado de recibir tareas para su ejecución.
+\item \textbf{Grupo :} El nombre del grupo al que pertenece el esclavo.
+\item \textbf{Última actualización :} Fecha y hora de la última vez que el esclavo actualizó su estado.
+\item \textbf{Lista de los programas no disponibles :} Lista que contiene los programas con los que no cuenta el esclavo. Sirve principalmente para no enviar tareas a esclavos que no poseen un determinado programa. Inicialmente la lista se encuentra vacía y a medida que el esclavo interactúa con el maestro la lista se va poblando. Que un programa se encuentre en dicha lista significa que el esclavo no cuenta con ese programa. Si un programa no se encuentra en esa lista significa que ese programa puede o no estar disponible en dicho esclavo. El detalle de cómo estas listas se poblan es explicado en la siguiente subsección.
+\end{itemize}
+\subsection{Asignación y ejecución de una tarea}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/image08.eps}
+\end{center}
+\caption{Diagrama de flujo sobre la asignación de tareas al esclavo}
+\label{fig:image08}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/image09.eps}
+\end{center}
+\caption{Diagrama de flujo sobre la ejecución de tareas en el esclavo}
+\label{fig:image09}
+\end{figure}
+Cuando en la cola de trabajos hay tareas sin ejecutar\footnote{estado de ejecución de tarea disponible} entonces el maestro se la asigna a un esclavo disponible. Un esclavo disponible para una tarea es aquel que:
+\begin{itemize}
+\item Su número de tareas es menor al número máximo de tareas (puede ejecutar al menos una tarea más).
+\item Se encuentra en disponibilidad dedicado (disponible para recibir tareas).
+\item El programa a ejecutar por la tarea no se encuentra en la lista de aplicaciones no disponibles del esclavo.
+\end{itemize}
+Cumpliendo todas estas condiciones el maestro asigna la tarea al esclavo. Eventualmente el esclavo puede no poseer la aplicación que necesita la tarea para su ejecución. En este caso, el esclavo notifica al maestro el hecho de no poseer la aplicación y rechaza la tarea. El nombre de la aplicación se agrega a la lista de programas no disponibles para ese esclavo.
+Una vez asignada la tarea, el esclavo la ejecuta inmediatamente y cambia su estado aumentando en uno su número de tareas. Cuando la tarea termina su ejecución, el esclavo notifica este evento y envía los resultados al esclavo. Con los resultados recibidos por el maestro la tarea es retirada de la cola de trabajos. El estado del esclavo cambia disminuyendo en uno el número de tareas. El estado del trabajo al que pertenece la tarea también cambia aumentando en uno las tareas completadas. La figura \ref{fig:image08} muestra un diagrama sobre el proceso de asignación de tareas a los esclavos y en la figura \ref{fig:image09} uno sobre la ejecución de tareas.
+\subsection{Determinación de la disponibilidad de un esclavo}
+Un esclavo tiene puede tener dos modos de disponibilidad, dedicado y no dedicado.
+\subsubsection{Modo dedicado}
+En el modo dedicado, el esclavo siempre se encuentra con la disponibilidad necesaria para recibir tareas. Este modo es útil para máquinas que se encuentran ociosas la mayor parte de su tiempo o se encuentran subutilizadas. En este modo no es necesario que el esclavo cuente con el programa salvapantallas.
+\subsubsection{Modo no dedicado}
+En el modo no dedicado, el esclavo cambia de disponibilidad según la utilización del computador en cierto momento. La determinación de la disponibilidad en este caso está vinculada al lanzamiento del salvapantallas por el sistema operativo. Cuando el salvapantallas es lanzado entonces el estado del esclavo cambia a prioridad dedicada. Mientras el salvapantallas esté en ejecución el esclavo puede recibir tareas (considerando que las otras condiciones para recibir tareas se cumplan). Si el salvapantallas no está en ejecución, el estado del esclavo cambia a prioridad no dedicada. El salvapantallas es un buen indicador de la actividad del usuario en el computador ya que se ejecuta cuando no se recibe actividad del usuario, lo que generalmente corresponde a que el usuario no está utilizando el computador.

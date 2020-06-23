@@ -1,0 +1,28 @@
+\emph{BOINC} (\textbf{B}erkeley \textbf{O}pen \textbf{I}nfrastructure for \textbf{N}etwork \textbf{C}omputing) es un popular sistema de software que permite a científicos e investigadores crear y operar proyectos de recursos computacionales públicos que facilitan muchos voluntarios alrededor del mundo. Entre los proyectos más conocidos se encuentran \emph{SETI@Home}\cite{setiathomepage}, un proyecto que tiene como objetivo la busqueda de inteligencia extraterrestre, y \emph{MilkyWay@home}\cite{milkywayathomepage} donde se usa el poder de BOINC para crear un mapa tridimiensional certero de la \emph{Vía Láctea}. Actualmente\footnote{21 de Junio de 2009}, la red mundial de BOINC tiene alrededor de 570.000 computadores que se traduce en un poder de cómputo promedio de unos 2.682 TeraFLOPs. Alternativamente BOINC puede ser usado por pequeñas redes institucionales involucrando sus propios computadores.
+\subsubsection{Características}
+BOINC fue concebido bajo el paradigma de la \emph{computación pública}\footnote{También es conocida como \emph{computación global} o \emph{computación p2p}} donde los recursos de personas particulares son dispuestos de manera pública para hacer supercomputación de alto rendimiento.
+
+BOINC establece una relación asimétrica entre proyectos y participantes.
+Los proyectos típicamente son pequeños grupos de investigación académica con limitado poder de cómputo y son los usuarios finales de BOINC. Los participances son individuos que poseen computadores con Windows, Linux u otro sistema operativo conectados a Internet.
+
+Para incentivar la participación, BOINC posee un elaborado sistema de incentivos en la forma de créditos que premian a los usuarios según cuanto hayan contribuido en tiempo de procesamiento. El sistema de incentivos también tiene la cualidad de ser altamente resistente a que los usuarios intenten \emph{trampas} para ganar créditos de forma indebida.
+\subsubsection{Arquitectura y funcionamiento}
+Un proyecto de BOINC corresponde a una organización o grupo de investigación que quiere disponer del poder de cómputo de los voluntarios para sus fines. Estos proyectos son identificados por una URL que corresponde a la página principal de su sitio y sirve como directorio de su servidor. Los participantes se registran a proyectos. Un proyecto puede involucrar a una o más aplicaciones, las que pueden cambiar con el tiempo. En la figura \ref{fig:image05} se muestra el esquema antes descrito.
+
+La complejidad del servidor de un proyecto BOINC está centrada alrededor de una base de datos relacional que almacena la descripción de aplicaciones, plataformas, versiones, resultados, cuentas, equipos, entre otros. Las funciones del servidor son efectuadas por un conjunto de servicios web y procesos demonios. Los servidores de datos manipulan las subidas de archivos usando un mecanismo de certificados que asegura que sólo los archivos legitimados con tamaños de archivos prescritos pueden ser subidos.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image05.eps}
+\caption{Esquema de los participantes de BOINC}
+\label{fig:image05}
+\end{figure}
+La descarga de archivos es llevada a cabo mediante HTTP plano. BOINC provee herramientas para crear, empezar, detener, consultar proyectos; agregar nuevas aplicaciones, plataformas, versiones de aplicaciones, y monitorear el rendimiento del servidor.
+
+Los participantes se pueden unir a un proyecto de BOINC visitando la página del proyecto, llenando la solicitud de registro y descargando el cliente BOINC. El cliente puede operar en muchos modos: como un salvapantallas que muestra gráficos correspondientes a la aplicación que se encuentra corriendo; como un servicio de Windows que corre incluso cuando el usuario no ha ingresado; como una aplicación que provee un despliegue tabular de los proyectos, trabajos y transferencias de archivos, y como un programa de línea de comando que se comunica mediante la entrada y salida estándar.
+\subsubsection{Desventajas}
+BOINC es un sistema demasiado general, haciéndolo el típico caso de \emph{aplastar una hormiga con una aplanadora}. Si bien puede ser adaptado a muchas situaciones, esto no significa que sea la mejor opción para el caso particular del presente proyecto ya que se necesita de consideraciones extra que resultan innecesarias y sólo complican la implementación. En específico se pueden distinguir los siguientes aspectos:
+\begin{itemize}
+\item BOINC no permite una implementación minimalista. Para poder utilizar el sistema se necesita de la creación de un proyecto, el que debe ser implementado cumpliendo las reglas establecidas para un servidor BOINC. Según la documentación de BOINC, se asegura que en poco tiempo y sin un gran esfuerzo en implementación se puede incorporar el sistema a una aplicación existente, pero el hecho de prácticamente necesitar elaborar un sitio web, montar una base de datos y además ceñirse al modelo BOINC son cosas que contradicen lo anteriormente mencionado.
+\item El sistema de recompensas a voluntarios es bueno cuando se necesita incentivar a los usuarios a participar en los proyectos para lograr que pongan a su disposición sus computadores. Sin embargo, cuando una institución quiere usar sus computadores ociosos, todo este sistema de recompensas es innecesario y carece de sentido. Si consideramos que para poder implementar un proyecto debemos considerar cuentas de usuarios entonces está característica se vuelve un obstáculo que dificulta el fácil uso del sistema.
+\end{itemize}
+
+

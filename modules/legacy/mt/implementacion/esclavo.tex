@@ -1,0 +1,50 @@
+El esclavo es el programa que corre en cada uno de los nodos del cluster virtual y que proporcionan el poder de cómputo al sistema. El esclavo debe encargarse de administrar la ejecución de un número determinado de tareas y para ello necesita de otros programas que lo ayudan a lograr tal fin.
+\subsection{Estructura de directorio del esclavo}
+El esclavo está compuesto por un conjunto de ejecutables. Entre estos ejecutables se encuentra el mismo programa esclavo, el salvapantallas y el conjunto de aplicaciones disponibles. Adicionalmente, según el sistema operativo y el modo de instalación, cuenta con ejecutables adicionales. En el caso de Windows XP se cuenta con el programa \texttt{SetPriority.exe}\cite{setprioritypage}, un programa que sirve para ajustar la prioridad que el sistema operativo le asigna a los procesos; y \texttt{svrany.exe} \cite{svranypage}, un programa que sirve para correr el programa esclavo como un servicio de Windows.
+
+Los archivos están estrictamente dispuestos en una estructura de directorios que se muestra en la figura \ref{fig:image25}
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.9\textheight]{images/image25.eps}
+\end{center}
+\caption[Estructura de directorio del esclavo]{Estructura de directorio del esclavo. Los cuantificadores n no implican que todos sean el mismo número, es simplemente para ilustrar el hecho de cantidad variable de elementos de un mismo tipo.}
+\label{fig:image25}
+\end{figure}
+La carpeta raíz del cluster virtual siempre debe encontrarse en una misma ruta\footnote{La ruta es diferente para cada sistema operativo}. Dentro de esta carpeta están el directorío \texttt{apps}, donde se encuentran las aplicaciones de línea de comandos disponibles por el esclavo, las que pueden estar organizadas en subdirectorios.
+
+La carpeta \texttt{envvars} contiene una lista de archivos que tienen especificadas las variables de entorno que se necesitan para la ejecución de las aplicaciones de línea de comando. El formato de estos archivos es descrito en el anexo \ref{anexo:instalacion_componentes}.
+
+La carpeta \texttt{tasks} es un directorio generado en tiempo de ejecución por el programa esclavo. En esta carpeta se crean subdirectorios que contienen los archivos de entrada y salida de las diferentes ejecuciones que se están llevando a cabo en el programa esclavo en ese instante. Cuando una ejecución termina o falla, la carpeta correspondiente a la ejecución es eliminada.
+La carpeta \texttt{stats} es generada en tiempo de ejecución y contiene la página HTML de estadísticas del sistema que muestra el salvapantallas. La página HTML es actualizada cuando el salvapantallas la necesite mostrar.
+\subsection{Estructura del programa esclavo}
+Al igual que el programa maestro, el programa esclavo funciona como un servicio. Su funcionamiento se puede resumir en solicitar tareas al maestro continuamente para ejecutarlas. Esto no requiere de una gran complejidad lógica interna. En la figura \ref{fig:image24} se muestra un diagrama con los módulos internos del programa esclavo.
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{images/image24.eps}
+\end{center}
+\caption{Estructura interna del programa esclavo}
+\label{fig:image24}
+\end{figure}
+Los diferentes módulos que componen el programa esclavo se listan a continuación:
+\subsubsection{Módulo comunicación}
+Al igual que el programa maestro, el programa esclavo es un programa reactivo, solo ejecuta acciones cuando recibe mensajes desde el maestro o el salvapantallas. El módulo comunicación cuenta con dos clases : \emph{comunicador maestro} y \emph{comunicador salvapantallas} que tienen como función recibir y enviar los mensajes que provienen tanto del maestro como del salvapantallas. El \emph{comunicador salvapantallas} es un servidor TCP que recibe las conexión correspondiente al salvapantallas de la misma máquina. El detalle de la comunicación entre el esclavo y el salvapantallas es descrita en la sección \ref{ref:com_esclavo_salvapantallas}. Cuando las acciones han sido ejecutadas, se envían las respuestas al cliente y finalmente el socket es cerrado.
+
+El \emph{comunicador esclavo} es un socket UDP que recibe y envía paquetes de un puerto determinado. Este comunicador tiene dos funciones. La primera es enviar y recibir los mensajes relacionados con la ejecución de tareas como los de transferencia de archivos, notificaciones de estado de progreso de la ejecución; y señales de inicio, término y falla de una ejecución de una tarea. La segunda función es enviar periódicamente el estado del esclavo. Estás funciones son descritas en detalle en la sección \ref{ref:com_maestro_esclavo}.
+\subsubsection{Módulo lista de tareas}
+Este módulo es el manejador de las tareas que se encuentran en ejecución. Es una clase contenedora que sirve de interfaz de una lista de clases, donde cada una de ellas manejan la ejecución de una tarea. Estás \emph{clases tarea} son las que finalmente ejecutan la tareas del sistema. Cuando una tarea es recibida por el programa esclavo, es enviada a este módulo, el que crea una \emph{clase tarea}. Esta clase se encarga de crear los archivos de entrada y recopilar los archivos de salida que son resultados de la aplicación y enviarlos de vuelta al maestro. También es la responsable de notificar cuando una ejecución de una tarea ha fallado. Por último, estas clases se encargan de modificar la prioridad que tiene la tarea dentro del sistema operativo.
+\subsubsection{Módulo lista de aplicaciones}
+Este módulo se encarga de manejar las aplicaciones disponibles por el esclavo. Este módulo tiene tres funciones. La primera función es construir, al inicio de la ejecución del programa esclavo, una base de datos SQLite3 con las aplicaciones presentes en la carpeta \texttt{apps}. Esta base de datos cuenta con una única tabla que se describe a continuación:
+\subsubsection{Tabla aplicaciones}
+\begin{verbatim}
+Aplicaciones( nombre , ruta )
+\end{verbatim}
+Atributos :
+\begin{itemize}
+\item \textbf{nombre :} Nombre de la aplicación.
+\item \textbf{ruta :} Ruta de la aplicación en el sistema de archivos local.
+\end{itemize}
+El código SQL de creación de la tabla anterior es el siguiente:
+\begin{verbatim}
+CREATE TABLE apps( name TEXT , app TEXT , PRIMARY KEY(name)); 
+\end{verbatim}
+La segunda función es servir como interfaz de la base de datos de aplicaciones que se creó al principio de la aplicación. La tercera función es recorrer los archivos contenidos en la carpeta \texttt{envvars} al inicio de la ejecución del programa esclavo, leyendo las variables de entorno definidas en éstos y setearlas para la ejecución de las aplicaciones disponibles por el esclavo.

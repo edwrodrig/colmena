@@ -1,0 +1,15 @@
+Actualmente Colmena es utilizado por Tundra\cite{tundrapage}, una herramienta de análisis metagenómico que actualmente se encuentra en desarrollo por el PROFC. Tundra aprovecha Colmena para hacer ensambles comparativos que consisten en calcular la similitud de una gran cantidad de secuencias de ADN de organismos con genomas conocidos. Los conjuntos de secuencias a comparar, en algunos casos, son cercanos al millón. Cada secuencia se debe comparar con cada genoma elegido, lo que significa una gran cantidad de tiempo de procesamiento.
+\subsection{Arquitectura de la aplicación de prueba}
+En la figura \ref{fig:image17} se muestra un diagrama de la relación entre Tundra y Colmena. En Tundra, los usuarios pueden crear proyectos e ingresar secuencias de ADN, típicamente contenidas en archivos ASCII. Las secuencias ya subidas pueden ser sometidas a un ensamble comparativo contra genomas conocidos, contenidos en la base de datos interna de Tundra.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image17.eps}
+\caption{Diagrama de la relación entre Tundra y Colmena}
+\label{fig:image17}
+\end{figure}
+Cuando un usuario opta por hacer un ensamble comparativo, un script PHP construye una especificación de trabajo con las secuencias del proyecto y los genomas a comparar. Una vez construido, el script envía la espacificación a Colmena mediante el programa cliente. Periódicamente el sistema consulta el estado del proceso a Colmena mediante el programa cliente, que se comunica con el maestro, tal como ya se ha explicado. Cuando el trabajo termina, los resultados son obtenidos y recibidos por un script PHP que procesa dicha información para construir el ensamble comparativo. Finalizada esta acción el usuario puede acceder a ver los resultados mediante una interfaz de visualización (figura \ref{fig:image18}).
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image18.eps}
+\caption{Interfaz de visualización de un ensamble comparativo}
+\label{fig:image18}
+\end{figure}

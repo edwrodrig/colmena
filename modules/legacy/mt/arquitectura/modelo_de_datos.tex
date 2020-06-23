@@ -1,0 +1,140 @@
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{images/image38.eps}
+\end{center}
+\caption{Modelo Entidad Relación que muestra la relación de los datos usados por el sistema}
+\label{fig:image38}
+\end{figure}
+En la figura \ref{fig:image38} se muestra un modelo entidad relación de los datos usados por el sistema. Cabe mencionar que dada la naturaleza del sistema, este modelo de datos no se encuentra implementado en una base de datos única, sino que se encuentra distribuido en las diferentes elementos que conforman el sistema, específicamente en el maestro y los esclavos. A continuación se decriben las entidades del modelo con sus respectivas relaciones y restricciones.
+\subsubsection{Trabajo}
+\begin{itemize}
+\item \textbf{Descripción :} Un trabajo define a un conjunto de tareas.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{id :} Identificador único del trabajo.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 3 :} \emph{Trabajo} tiene de 1 a n \emph{Tareas}.
+\item \textbf{Relación 10 :} \emph{Trabajo} es poseido por 1 \emph{Usuario}.
+\end{itemize}
+\end{itemize}
+\subsubsection{Tarea}
+\begin{itemize}
+\item \textbf{Descripción :} Unidad atómica de procesamiento dentro del sistema.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{id :} Identificador único de la tarea.
+\item \textbf{args :} Argumentos de la ejecución de la tarea.
+\item \textbf{stdin :} Datos de la entrada estandar de la tarea.
+\item \textbf{stdout :} Datos de la salida estandar de la tarea.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 1 :} \emph{Tarea} tiene como entrada de 0 a n \emph{Archivos}.
+\item \textbf{Relación 2 :} \emph{Tarea} tiene como salida 1 a n \emph{Archivos}.
+\item \textbf{Relación 3 :} \emph{Tarea} es parte de 1 \emph{Trabajo}.
+\item \textbf{Relación 4 :} \emph{Tarea} es ejecutada por 0 a 1 \emph{Esclavo}.
+\item \textbf{Relación 5 :} \emph{Tarea} está asociada con 1 \emph{Programa}.
+\end{itemize}
+\item \textbf{Restricciones :}
+\begin{itemize}
+\item \emph{Tarea} no puede estar relacionada con un \emph{Archivo} mediante la relación 1 y 2 simultameamente (un archivo es entrada o salida de una tarea pero no ambas).
+\item \emph{id} de \emph{Tarea} es una composición del \emph{id} del \emph{Trabajo} relacionado por 3 más un valor numérico.
+\end{itemize}
+\end{itemize}
+\subsubsection{Archivo}
+\begin{itemize}
+\item \textbf{Descripción :} Representa un archivo que es usado como entrada o salida de una tarea.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{id :} Identificador de la tarea a la que esta asociada.
+\item \textbf{nombre :} Nombre del archivo.
+\item \textbf{datos :} Datos del archivo.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 1 :} \emph{Archivo} es entrada de 1 a n \emph{Tareas}.
+\item \textbf{Relación 2 :} \emph{Archivo} es salida 1 a n \emph{Tareas}.
+\end{itemize}
+\item \textbf{Restricciones :}
+\begin{itemize}
+\item \emph{Archivo} no puede estar relacionada con \emph{Tareas} mediante la relación 1 y 2 simultameamente (un archivo puede ser entrada o salida de una tarea).
+\item \emph{Archivo} solo se puede relacionar a \emph{Tareas} por un solo tipo de  relación (un archivo no puede ser entrada de una tarea y salida de otra).
+\item \emph{id} de \emph{Archivo} debe ser igual al \emph{id} de \emph{Tarea} al que está relacionado mediante la relación 1 o 2 (esto permite que diferentes tareas puedan tener archivos con un mismo nombre). 
+\end{itemize}
+\end{itemize}
+\subsubsection{Esclavo}
+\begin{itemize}
+\item \textbf{Descripción :} Representa a un esclavo del sistema. Dentro del sistema la información del esclavo es redundante ya que está replicada en dos partes, en el esclavo en sí y en la lista del maestro que guarda los estados del maestro. Esta entidad concilia ambas partes.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{id :} Identificador del esclavo dentro del sistema.
+\item \textbf{max\_tareas :} Número máximo de tareas que puede ejecutar un esclavo.
+\item \textbf{disp :} Disponibilidad del esclavo.
+\item \textbf{actualización :} Fecha de la última actualización del esclavo en el maestro.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 4 :} \emph{Esclavo} ejecuta de 0 a n \emph{Tareas}.
+\item \textbf{Relación 6 :} \emph{Esclavo} tiene 1 a n \emph{Programas}.
+\item \textbf{Relación 7 :} \emph{Esclavo} es parte de 0 a 1 \emph{Grupo}.
+\end{itemize}
+\item \textbf{Restricciones :}
+\begin{itemize}
+\item Un \emph{Esclavo} no puede estar relacionado a \emph{Tarea} mediante la relación 4 más veces que lo indicado en el valor del atributo \emph{max\_tareas} (un esclavo no puede ejecutar más tareas simultaneas que lo especificado en su máximo).
+\end{itemize}
+\end{itemize}
+\subsubsection{Programa}
+\begin{itemize}
+\item \textbf{Descripción :} Representa a un programa disponible para su ejecución dentro del sistema. Los esclavos poseen los programas (tienen el ejecutable en sí). El maestro y las tareas se referencian a estos mediante el nombre del ejecutable.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{nombre :} Nombre del ejecutable (en programas Windows no se considera la extensión .exe).
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 5 :} \emph{Programa} está asociado a 0 a n \emph{Tareas}.
+\item \textbf{Relación 6 :} \emph{programa} está en 1 a n \emph{Esclavos}.
+\end{itemize}
+\end{itemize}
+\subsubsection{Usuario}
+\begin{itemize}
+\item \textbf{Descripción :} Representa a un usuario dentro del sistema.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{nombre :} Nombre identificador del usuario.
+\item \textbf{contraseña :} Contraseña de acceso del usuario.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 9 :} \emph{Usuario} posee 0 a n \emph{Trabajos}.
+\item \textbf{Relación 10 :} \emph{Usuario} posee 0 a n \emph{Grupos}.
+\end{itemize}
+\end{itemize}
+\subsubsection{Grupo}
+\begin{itemize}
+\item \textbf{Descripción :} Representa una agrupación determinada de esclavos que tiene un comportamiento de salvapantallas en común.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{nombre :} Nombre identificador del grupo.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 7 :} \emph{Grupo} es poseidoposee 0 a n \emph{Trabajos}.
+\item \textbf{Relación 8 :} \emph{Grupo} tiene 0 a n \emph{Páginas}.
+\item \textbf{Relación 9 :} \emph{Usuario} es poseido por 1 \emph{Usuario}.
+\end{itemize}
+\end{itemize}
+\subsubsection{Páginas}
+\begin{itemize}
+\item \textbf{Descripción :} Representa una página a mostrar por los salvapantallas de los esclavos de un grupo.
+\item \textbf{Atributos :}
+\begin{itemize}
+\item \textbf{url:} URL de la página a mostrar.
+\end{itemize}
+\item \textbf{Relaciones :}
+\begin{itemize}
+\item \textbf{Relación 8 :} \emph{Página} tiene 1 a n \emph{Grupos}.
+\end{itemize}
+\end{itemize}

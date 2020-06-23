@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 21
+/svn/vc3/!svn/ver/31/
+END
+datareceiver.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/vc3/!svn/ver/32/datareceiver.cpp
+END
+protocol.txt
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/vc3/!svn/ver/1/protocol.txt
+END
+communicator.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/communicator.cpp
+END
+datareceiver.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/datareceiver.hpp
+END
+communicator.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/vc3/!svn/ver/1/communicator.hpp
+END
+datasender.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/vc3/!svn/ver/32/datasender.cpp
+END
+inputstream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/vc3/!svn/ver/1/inputstream.cpp
+END
+messagerepeater.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/9/messagerepeater.cpp
+END
+clientmasterdef.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/1/clientmasterdef.hpp
+END
+datasender.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/vc3/!svn/ver/1/datasender.hpp
+END
+inputstream.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/vc3/!svn/ver/1/inputstream.hpp
+END
+messagerepeater.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/vc3/!svn/ver/1/messagerepeater.hpp
+END
+slavessaverdef.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/vc3/!svn/ver/1/slavessaverdef.hpp
+END
+message.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/vc3/!svn/ver/1/message.cpp
+END
+message.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/vc3/!svn/ver/1/message.hpp
+END

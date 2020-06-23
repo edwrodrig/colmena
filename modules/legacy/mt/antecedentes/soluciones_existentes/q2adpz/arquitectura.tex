@@ -1,0 +1,13 @@
+El sistema consiste en un proceso central llamado \emph{maestro}, un número variable de procesos en diferentes computadores de una red llamados \emph{esclavos} y un número de procesos \emph{cliente} que generan tareas agrupadas en trabajos. En la figura \ref{fig:image01} se grafica este esquema.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/image01.eps}
+\caption{La arquitectura de Q$^2$ADPZ}
+\label{fig:image01}
+\end{figure}
+El componente esclavo corre como un proceso permanente. Su rol principal es notificar al \emph{maestro} sobre su estado y sus recursos disponibles. Otro rol que posee es lanzar una aplicación, consecuencia de una petición del maestro. La aplicación, en la forma de una biblioteca, ejecutable o programa interpretado, es transferida desde el servidor de acuerdo a la descripción de la tarea, entonces es ejecutada con los argumentos de línea de comando especificadas en dicha descripción.
+
+Al momento en que un esclavo recibe una tarea, en primera instancia descarga el ejecutable o programa interpretado desde un repositorio automático de datos (implementado sobre un servidor web en Perl), o desde una dirección URL. Luego, el esclavo procede a descargar y preparar todos los archivos de entrada requeridos. Después que el ejecutable o programa interpretado termina, los archivos de salida generados son subidos al repositorio web para ser posteriormente obtenidos por el cliente que creó la tarea.
+
+El maestro además escucha a todos los esclavos y de esta forma tiene una visión general de todos los recursos disponibles en el sistema. El maestro acepta peticiones de tareas de los clientes y le asigna los nodos (esclavos) más adecuados. Además de esto, el maestro permite reservar nodos: los clientes son notificados después de que los recursos se encuentren disponibles.
+
+El cliente consiste en una aplicación que usa una biblioteca cliente de servicios. Esta biblioteca provee una API C++ para la comunicación con el maestro, permitiendo controlar y comenzar trabajos y tareas, además de obtener los resultados de éstos. Los usuarios pueden utilizar la API directamente en sus aplicaciones o usar un cliente universal que ingresa y controla las tareas en base a un archivo de especificación en formato XML.

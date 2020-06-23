@@ -1,0 +1,47 @@
+\select@language {spanish}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Esquema del sistema de cluster virtual}}{4}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Un sistema distribuido conecta procesadores mediante una red de computaci\'on}}{7}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Esquema de los participantes de BOINC}}{16}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces La arquitectura de Q$^2$ADPZ}}{19}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Las capas de comunicaci\'on de Q$^2$ADPZ}}{20}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces La arquitectura del sistema de cluster virtual}}{23}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagrama de la cola de trabajos del maestro}}{27}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagrama de flujo sobre la asignaci\'on de tareas al esclavo}}{29}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Diagrama de flujo sobre la ejecuci\'on de tareas en el esclavo}}{30}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Pantalla de informaci\'on estad\IeC {\'\i }stica del salvapantallas}}{33}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Diagrama de flujo del funcionamiento del salvapantallas}}{34}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Diagrama de casos de uso del sistema de cluster virtual}}{35}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Modelo Entidad Relaci\'on que muestra la relaci\'on de los datos usados por el sistema}}{38}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Esquema de roles de la arquitectura del cluster virtual con respecto a los diferentes programas}}{44}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Modelo entidad-relaci\'on de la especificaci\'on de trabajos}}{46}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Componentes del programa maestro}}{48}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Estructura de directorio del esclavo}}{53}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Estructura interna del programa esclavo}}{54}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Esquema del funcionamiento de un NAT}}{66}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces El proceso de UDP hole punching}}{67}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Funcionamiento de los repetidores UDP}}{68}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Mecanismo de transferencia de archivos mediante UDP}}{69}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Proceso de registro de un esclavo}}{71}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Primer caso de proceso fallido de obtenci\'on de una tarea}}{73}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Proceso exitoso de obtenci\'on de tarea}}{75}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Segundo caso de proceso fallido de obtenci\'on de tarea}}{75}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Notificaci\'on de error de ejecuci\'on al maestro}}{77}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Env\IeC {\'\i }o de resultados al maestro}}{77}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Liberaci\'on de tarea}}{78}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Env\IeC {\'\i }o de resultados al maestro}}{79}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Casos de intercambio de mensajes entre programa esclavo y salvapantallas}}{79}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Estructura del cluster virtual Colmena de la Universidad de Concepci\'on}}{82}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces P\'agina principal del portal del cluster virtual de la Universidad de Concepci\'on}}{83}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Diagrama de la relaci\'on entre Tundra y Colmena}}{84}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Interfaz de visualizaci\'on de un ensamble comparativo}}{85}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Gr\'afico de la raz\'on versus el n\'umero de esclavos}}{87}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Estructura de \'arbol propuesta para el cluster virtual}}{91}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
